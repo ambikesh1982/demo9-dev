@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "f00dz9-app": {
+      "hosting": {
+        "yummz9-dev": [
+          "f00dz9-app"
+        ]
+      }
+    }
+  }
+}

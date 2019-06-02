@@ -1,0 +1,19 @@
+{
+  "hosting": [
+    {
+      "target": "yummz9-dev",
+      "public": "dist/yummz9-dev",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ]
+}
