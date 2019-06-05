@@ -35,15 +35,14 @@ export class GooglePlacesDirective implements OnInit {
     autoComplete.addListener('place_changed', () => {
       this.ngZone.run(() => {
         const place = autoComplete.getPlace();
-        if (place.geometry) {
+        if (!place.place_id || place.geometry === undefined || place.geometry === null) {
+          return;
+        } else{
           const geoInfo = new firebase.firestore.GeoPoint(
             place.geometry.location.lat(),
             place.geometry.location.lng()
           );
           this.addressFromGoogle.emit(geoInfo);
-        } else {
-          console.log('No such place found! please retry...');
-          this.addressFromGoogle.emit(null);
         }
       });
     });
