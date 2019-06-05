@@ -37,7 +37,7 @@ export class GooglePlacesDirective implements OnInit {
         const place = autoComplete.getPlace();
         if (!place.place_id || place.geometry === undefined || place.geometry === null) {
           return;
-        } else{
+        } else {
           const geoInfo = new firebase.firestore.GeoPoint(
             place.geometry.location.lat(),
             place.geometry.location.lng()
