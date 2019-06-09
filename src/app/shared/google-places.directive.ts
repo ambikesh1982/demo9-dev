@@ -17,32 +17,31 @@ export class GooglePlacesDirective implements OnInit {
     private script: ScriptLoadService,
     private elementRef: ElementRef,
     private ngZone: NgZone,
-    ) {
-      this.element = elementRef.nativeElement;
-    }
+  ) {
+    this.element = this.elementRef.nativeElement;
+  }
 
   ngOnInit() {
     console.log('Start loading google maps scrtip...');
-    this.script.load({ name: 'googleMap', url: environment.googleMapURL, id: 'googleMap'})
+    this.script.load({ name: 'googleMap', url: environment.googleMapURL, id: 'googleMap' })
       .then(resp => {
         this.placeAutoComplete(this.element);
-      });
+      }).catch(e => console.error('Error in script.load...', e));
   }
 
   placeAutoComplete(searchElement: HTMLInputElement) {
-    const autoComplete = new google.maps.places.Autocomplete(searchElement);
+    // fields: geometry|address_components|formatted_address
+    const autoComplete = new google.maps.places.Autocomplete(searchElement, { types: ['geocode'], fields: ['formatted_address'] });
 
     autoComplete.addListener('place_changed', () => {
       this.ngZone.run(() => {
         const place = autoComplete.getPlace();
-        if (!place.place_id || place.geometry === undefined || place.geometry === null) {
-          return;
+
+        if (place.formatted_address) {
+          this.addressFromGoogle.emit(place.formatted_address);
         } else {
-          const geoInfo = new firebase.firestore.GeoPoint(
-            place.geometry.location.lat(),
-            place.geometry.location.lng()
-          );
-          this.addressFromGoogle.emit(geoInfo);
+          searchElement.value = null;
+          return;
         }
       });
     });

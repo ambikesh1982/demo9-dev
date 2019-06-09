@@ -24,20 +24,30 @@ import { Routes, RouterModule } from '@angular/router';
 import { canActivate, redirectUnauthorizedTo, redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { HomeComponent } from './home/home.component';
 
-const redirectUnauthorizedToLogin = redirectUnauthorizedTo(['login']);
-const redirectLoggedInToHome = redirectLoggedInTo(['']);
+
+const redirectLoggedInToProductList = redirectLoggedInTo(['product']);
+const redirectUnauthorizedToHome = redirectUnauthorizedTo(['/']);
 
 const routes: Routes = [
-  { path: '', component: HomeComponent, ...canActivate(redirectUnauthorizedToLogin) },
+  {
+    path: '', component: HomeComponent, ...canActivate(redirectLoggedInToProductList)
+  },
   { path: 'login',
-    loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
-    ...canActivate(redirectLoggedInToHome)
+    loadChildren: () => import('./login/login.module').then(m => m.LoginModule)
    },
+  { path: 'product',
+    loadChildren: () => import('./product/product.module').then(m => m.ProductModule),
+    ...canActivate(redirectUnauthorizedToHome)
+  },
+  {
+    path: 'user',
+    loadChildren: () => import('./user/user.module').then(m => m.UserModule)
+  },
   { path: '', redirectTo: '', pathMatch: 'full' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {enableTracing: true})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

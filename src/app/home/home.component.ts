@@ -14,4 +14,8 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
   }
 
+  getGeoInfo(geo) {
+    console.log('geoInfo returned from appGooglePlaces directive: ', geo);
+  }
+
 }

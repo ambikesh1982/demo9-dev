@@ -1,17 +1,6 @@
-<div fxLayout="column" fxLayoutAlign="center stretch" style="height:100%">
-    <!-- <div fxLayout="row">
-    <mat-icon class="bigIcon" color="primary">search</mat-icon>
-    <h2>Hungry?</h2>
-  </div> -->
+<div fxLayout="column" style="height:100%">
     <mat-toolbar color="primary">
-        <mat-toolbar-row>
-            <!-- <span>Have an account? </span>
-            <span class="spacer"></span>
-            <button mat-stroked-button> Login</button> -->
-            <!-- <mat-icon>add_shopping_cart</mat-icon>
-      <mat-icon>done</mat-icon>
-      <mat-icon>chat_bubble</mat-icon> -->
-        </mat-toolbar-row>
+        <mat-toolbar-row></mat-toolbar-row>
     </mat-toolbar>
 
     <div fxLayout="row wrap" fxLayoutAlign="center stretch">
@@ -22,27 +11,16 @@
             </div>
 
             <div>
-                <mat-form-field style="width:100%;font-size: 0.8em" appearance="outline">
+                <mat-form-field style="width:100%; max-width: 400px;" appearance="outline">
                     <mat-label>Enter your address...</mat-label>
                     <input 
                         type="text" 
                         matInput 
                         [formControl]="myControl"
-                        appGooglePlaces>
+                        appGooglePlaces
+                        (addressFromGoogle)="getGeoInfo($event)">
                 </mat-form-field>
                 </div>
         </div>
     </div>
-
-    <!-- <mat-toolbar color="accent" fxFlex="1 0 auto" ></mat-toolbar> -->
-
-    <!-- <div fxLayout="row">
-      <mat-icon class="bigIcon" color="accent">room_service</mat-icon>
-      <h2 class="pullLeft">Post your delicacy.</h2>
-     
-    </div>
-    <h3>Become a Home Chef.</h3>
-    <h3>Create your profile and setup your kitchen!</h3> -->
-    <!-- <app-fab-action fabIcon="navigate_next" #selectedAddress (fabActionEvent)="onClickDone()"> -->
-    <!-- </app-fab-action> -->
 </div>
