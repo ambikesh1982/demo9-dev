@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 // import { AppUser } from './models';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { first, tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 interface AppUser {
   uid: string;
@@ -19,11 +20,11 @@ export class AuthService {
   currUser$: Observable<AppUser | null>;
   currUser: AppUser | null;
 
-  constructor(private auth: AngularFireAuth) {
-    this.currUser$ = this.auth.authState.pipe(
-      tap( user => {
-        if (user) {
-          console.log('<<<< User loggedin >>>>', user);
+  constructor(private af: AngularFireAuth, private router: Router) {
+    this.currUser$ = this.af.authState.pipe(
+      tap( resp => {
+        if (resp) {
+          console.log('<<<< User loggedin >>>>', resp);
         } else {
           console.log('<<<< User not loggedin >>>>');
         }
@@ -37,7 +38,7 @@ export class AuthService {
 
   async loginAnonymously() {
     console.log('AuthService.loginAnonymously()...');
-    return this.auth.auth.signInAnonymously()
+    return this.af.auth.signInAnonymously()
       .then((credential: firebase.auth.UserCredential) => {
         const anomymousUser: AppUser = {
           uid: credential.user.uid,
@@ -47,6 +48,12 @@ export class AuthService {
         };
         this.currUser = anomymousUser;
   });
+}
+
+async logout() {
+  await this.af.auth.signOut();
+  this.currUser = null;
+  this.router.navigate(['/']);
 }
 
 }

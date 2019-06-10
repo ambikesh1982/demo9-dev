@@ -1,3 +1,4 @@
+<ng-template *ngIf="this.auth.currUser$|async"></ng-template>
 <app-navigation [title]=title>
   <router-outlet></router-outlet>
 </app-navigation>
