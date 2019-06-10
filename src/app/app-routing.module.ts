@@ -26,7 +26,7 @@ import { HomeComponent } from './home/home.component';
 
 
 const redirectLoggedInToProductList = redirectLoggedInTo(['product']);
-const redirectUnauthorizedToHome = redirectUnauthorizedTo(['/']);
+const redirectUnauthorizedToHome = redirectUnauthorizedTo(['']);
 
 const routes: Routes = [
   {
