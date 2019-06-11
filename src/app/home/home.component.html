@@ -1,9 +1,9 @@
-<div fxLayout="column" style="height:100%">
+<div fxLayout="column">
     <mat-toolbar color="primary">
         <mat-toolbar-row></mat-toolbar-row>
     </mat-toolbar>
 
-    <div fxLayout="row wrap" fxLayoutAlign="center stretch">
+    <div>
         <div style="margin:8px">
             <div style="margin:8px">
                 <h1>Hungry?</h1>
@@ -13,14 +13,17 @@
             <div>
                 <mat-form-field style="width:100%; max-width: 400px;" appearance="outline">
                     <mat-label>Enter your address...</mat-label>
-                    <input 
+                    <input
                         type="text" 
                         matInput 
                         [formControl]="myControl"
                         appGooglePlaces
-                        (addressFromGoogle)="getGeoInfo($event)">
+                        (addressFromGoogle)="collectUserGeoInfo($event)">
                 </mat-form-field>
                 </div>
         </div>
     </div>
+    <button mat-fab [disabled]="!userGeo" style="position: fixed; bottom:20px; right: 20px" (click)="enterTheApp()">
+        <mat-icon>done</mat-icon>
+    </button>
 </div>

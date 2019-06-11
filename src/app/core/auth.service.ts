@@ -8,8 +8,9 @@ import { Router } from '@angular/router';
 interface AppUser {
   uid: string;
   isAnonymous: boolean;
-  displayName: string;
-  photoURL: string;
+  displayName?: string;
+  photoURL?: string;
+  address?: string;
 }
 
 @Injectable({
@@ -36,7 +37,7 @@ export class AuthService {
     return this.currUser$.pipe(first()).toPromise();
   }
 
-  async loginAnonymously() {
+  async loginAnonymously(geo: string) {
     console.log('AuthService.loginAnonymously()...');
     return this.af.auth.signInAnonymously()
       .then((credential: firebase.auth.UserCredential) => {
@@ -44,9 +45,11 @@ export class AuthService {
           uid: credential.user.uid,
           isAnonymous: credential.user.isAnonymous,
           displayName: 'Guest',
-          photoURL: '/assets/profile_placeholder.png'
+          photoURL: '/assets/profile_placeholder.png',
+          address: geo
         };
         this.currUser = anomymousUser;
+        console.log('TODO: loginAnonymously(): User Data - ', this.currUser);
   });
 }
 

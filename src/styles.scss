@@ -5,3 +5,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .spacer{
     flex: auto;
 }
+
+.fabAction{
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99;
+}

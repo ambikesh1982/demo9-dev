@@ -14,7 +14,7 @@
 
             <span class="spacer"></span>
 
-            <button mat-stroked-button (click)="drawer.toggle()" [routerLink]="['/sign-in']">
+            <button mat-stroked-button (click)="drawer.toggle()" [routerLink]="['/user/', user.uid]">
               <span>Sign in</span>
             </button>
 
@@ -56,5 +56,4 @@
     <!-- Add Content Here -->
     <ng-content></ng-content>
   </mat-sidenav-content>
-
 </mat-sidenav-container>

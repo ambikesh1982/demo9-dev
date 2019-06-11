@@ -17,6 +17,7 @@ export class AuthGuard implements  CanActivate {
         return true;
       } else {
         console.log('Unauthorised User >>>>>> : Redirecting to home page');
+        this.router.navigate(['/']);
         // this.router.navigate(['user', user.uid], { queryParams: { returnUrl: state.url } });
         return false;
       }
