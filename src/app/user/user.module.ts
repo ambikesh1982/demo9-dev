@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { Routes, RouterModule } from '@angular/router';
 import { canActivate, loggedIn } from '@angular/fire/auth-guard';
+import { MaterialModule } from '../material/material.module';
 
 const userRoutes: Routes = [
   {
@@ -16,6 +17,7 @@ const userRoutes: Routes = [
   declarations: [UserProfileComponent],
   imports: [
     CommonModule,
+    MaterialModule,
     RouterModule.forChild(userRoutes)
   ]
 })

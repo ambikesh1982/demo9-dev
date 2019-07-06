@@ -9,7 +9,7 @@
           <mat-toolbar color="primary">
 
             <a mat-mini-fab [routerLink]="['/user/', user.uid]" (click)="drawer.toggle()">
-              <mat-icon>perm_identity</mat-icon>
+              <mat-icon>perm_identity</mat-icon> {{user.displayName}}
             </a>
 
             <span class="spacer"></span>
@@ -26,7 +26,7 @@
           <mat-toolbar color="primary">
             <span class="mat-body" [routerLink]="['/user/', user.uid]">{{user.displayName}}</span>
             <span class="spacer"></span>
-            <button mat-stroked-button (click)="auth.logout() && drawer.toggle()">
+            <button mat-stroked-button (click)="auth.signOut() && drawer.toggle()">
               <span>Sign out</span>
             </button>
           </mat-toolbar>

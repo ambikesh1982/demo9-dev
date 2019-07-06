@@ -2,13 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GooglePlacesDirective } from './google-places.directive';
 import { MaterialModule } from '../material/material.module';
+import { ImgUploadComponent } from './img-upload/img-upload.component';
 
 const SHARED_COMPONENTS = [
-  GooglePlacesDirective
+  GooglePlacesDirective,
+  ImgUploadComponent,
 ];
 
 @NgModule({
-  declarations: [GooglePlacesDirective],
+  declarations: [GooglePlacesDirective, ImgUploadComponent],
   imports: [
     CommonModule,
     MaterialModule

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Title } from '@angular/platform-browser';
 import { AuthService } from '../core/auth.service';
+import { AppUser } from '../core/models';
 
 @Component({
   selector: 'app-navigation',
@@ -18,6 +19,6 @@ export class NavigationComponent {
       map(result => result.matches)
     );
 
-  constructor(private breakpointObserver: BreakpointObserver, public auth: AuthService) {}
+  constructor(private breakpointObserver: BreakpointObserver, public auth: AuthService) { }
 
 }

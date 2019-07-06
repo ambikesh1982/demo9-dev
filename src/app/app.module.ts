@@ -1,5 +1,6 @@
 import { LayoutModule } from '@angular/cdk/layout';
 import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
@@ -16,7 +17,7 @@ import { HomeComponent } from './home/home.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { SharedModule } from './shared/shared.module';
 import { MaterialModule } from './material/material.module';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 @NgModule({
@@ -35,9 +36,10 @@ import { LocationStrategy, HashLocationStrategy } from '@angular/common';
     BrowserModule,
     BrowserAnimationsModule,
     CoreModule,
-    ReactiveFormsModule,
+    FlexLayoutModule,
     LayoutModule,
     MaterialModule,
+    ReactiveFormsModule,
     SharedModule,
   ],
   providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],

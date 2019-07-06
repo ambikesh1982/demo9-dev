@@ -1,6 +1,10 @@
 <div fxLayout="column">
     <mat-toolbar color="primary">
-        <mat-toolbar-row></mat-toolbar-row>
+        <mat-toolbar-row>
+            <span>Have an account?</span>
+            <span class="spacer"></span>
+            <button mat-stroked-button (click)="googleSignIn()">Login</button>
+        </mat-toolbar-row>
     </mat-toolbar>
 
     <div>
@@ -18,7 +22,8 @@
                         matInput 
                         [formControl]="myControl"
                         appGooglePlaces
-                        (addressFromGoogle)="collectUserGeoInfo($event)">
+                        (addressFromGoogle)="collectUserGeoInfo($event)"
+                        (click)="userGeo=false">
                 </mat-form-field>
                 </div>
         </div>

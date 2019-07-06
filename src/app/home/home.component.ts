@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { AuthService } from '../core/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +12,7 @@ export class HomeComponent implements OnInit {
   myControl = new FormControl();
   userGeo: string;
 
-  constructor(private auth: AuthService) {
+  constructor(private auth: AuthService, private router: Router) {
     this.userGeo = null;
   }
 
@@ -19,13 +20,21 @@ export class HomeComponent implements OnInit {
   }
 
   collectUserGeoInfo(geo) {
+    console.log(geo);
     this.userGeo = geo;
+  }
+
+  googleSignIn() {
+    this.auth.googleSignin();
   }
 
   enterTheApp() {
     console.log('TODO: Collect user geo information: ', this.userGeo);
     console.log('TODO: Login Anonymously');
-    this.auth.loginAnonymously(this.userGeo);
+    this.auth.loginAnonymously(this.userGeo).then( () => {
+      console.log('TODO: Redirect user to product/list page');
+      this.router.navigate(['/']);
+    });
     console.log('TODO: Create Guest user in firebase');
 
   }

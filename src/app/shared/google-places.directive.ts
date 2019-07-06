@@ -41,6 +41,7 @@ export class GooglePlacesDirective implements OnInit {
           this.addressFromGoogle.emit(place.formatted_address);
         } else {
           searchElement.value = null;
+          this.addressFromGoogle.emit(null);
           return;
         }
       });

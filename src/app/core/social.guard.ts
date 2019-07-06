@@ -10,9 +10,9 @@ export class SocialGuard implements CanActivate {
   async canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Promise<boolean> {
-    const user = await this.auth.currentUser;
-    if ( user.isAnonymous ) {
-      console.log('Anonymous User >>>>>> : Redirecting to login page');
+    const user = await this.auth.getCurrentUser();
+    if (user.isAnonymous ) {
+      console.log('Anonymous User >>>>>> : Redirecting to User page');
       this.router.navigate(['user', user.uid], { queryParams: { returnUrl: state.url } });
       return false;
     }
