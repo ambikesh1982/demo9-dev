@@ -68,6 +68,8 @@ export class ImgUploadComponent implements OnInit, OnDestroy {
       this.updateFileCount(-1);
       this.downloadURL = null;
       this.imageUploaded.emit(null);
+      this.uploadPercent$ = null;
+      this.cleanup(this.imagesToBeDeleted); // Todo: Remove the method.....
     }
   }
 

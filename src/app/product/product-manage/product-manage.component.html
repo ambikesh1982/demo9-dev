@@ -1,6 +1,7 @@
-<div fxLayout="column" style="max-width: 500px">
+<mat-card fxLayout="column" style="max-width: 500px">
   
-    <mat-horizontal-stepper #stepper linear>
+    <mat-horizontal-stepper #stepper class="stepper-height">
+
       <mat-step label="Image" [stepControl]="imageForm">
         <form [formGroup]="imageForm">
         <app-img-upload #upload [storageBucket]="productPath" (imageUploaded)="showImageDetails($event)">
@@ -8,12 +9,13 @@
           </form>
       </mat-step>
 
+
       <mat-step label="Details" [stepControl]="productForm">
         <form [formGroup]="productForm" fxLayout="column">
         <mat-slide-toggle labelPosition="before" fxFlex="0 1 48" matInput formControlName="isNonVeg" required>Is Non-Veg
         </mat-slide-toggle>
         <br>
-        <br>
+        
         <mat-form-field class="product-full-width" appearance="outline">
           <mat-label>Title</mat-label>
           <input matInput type="text" required formControlName="title">
@@ -38,20 +40,14 @@
           <mat-radio-button value="instant">Instant</mat-radio-button>
           <mat-radio-button value="preOrder">Pre-Order</mat-radio-button>
         </mat-radio-group>
-        </form>
-      </mat-step>
 
-      <mat-step>
-        <ng-template matStepLabel editable="false">Done</ng-template>
+        </form>
       </mat-step>
 
     </mat-horizontal-stepper>
 
-    <p>ImageForm: {{imageForm.status|json}}</p>
-    <p>ProductForm: {{productForm.status|json}}</p>
-
-  <button mat-fab style="position: fixed; bottom:20px; right: 20px"
-    (click)="stepper.selectedIndex == 2? postItem(imageForm.value, productForm.value):stepper.next()">
-    <mat-icon>{{stepper.selectedIndex == 2? 'done':'arrow_forward'}}</mat-icon>
+  <button mat-fab style="position: fixed; bottom:20px; right: 20px; z-index:99"
+    (click)="stepperAction(stepper)" [disabled]="disableFabAction">
+    <mat-icon>{{stepper.selectedIndex == 1? 'done':'arrow_forward'}}</mat-icon>
   </button>
-</div>
+</mat-card>

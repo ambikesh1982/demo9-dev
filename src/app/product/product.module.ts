@@ -8,6 +8,7 @@ import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ProductResolver } from './product.resolver';
 
 
 const productRoutes: Routes = [
@@ -15,7 +16,8 @@ const productRoutes: Routes = [
     path: 'product/:id',
     component: ProductManageComponent,
     data: { title: 'PRODUCT_MANAGE_PAGE' },
-    canActivate: [SocialGuard]
+    canActivate: [SocialGuard],
+    resolve: { product: ProductResolver }
   },
   {
     path: '',
@@ -33,6 +35,7 @@ const productRoutes: Routes = [
     ReactiveFormsModule,
     SharedModule,
     RouterModule.forChild(productRoutes)
-  ]
+  ],
+  providers: [ProductResolver]
 })
 export class ProductModule { }

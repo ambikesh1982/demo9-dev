@@ -9,6 +9,10 @@
   width: 100%;
 }
 
+.stepper-height {
+  min-height: 400px;
+}
+
 // ::ng-deep .mat-slide-toggle:not(.mat-checked) .mat-slide-toggle-thumb {
 //     background-color: red; /*replace with your thumb color*/
 // }

@@ -22,21 +22,21 @@ export interface FirebaseImage {
 export interface MiniUser {
     uid: string;
     name: string;
-    profilePicURL: string;
+    photoURL: string;
 }
 
-export interface Product {
+export interface Fooditem {
     isNew: boolean;
     id: string;
     title: string;
     price: number;
     serving: number;
     isNonVeg: boolean;
+    createdAt?: Date;
+    createdBy?: MiniUser;
     orderType?: string;
-    images: FirebaseImage;
-    likeCount: number;
-    createdAt: Date;
-    createdBy: MiniUser;
+    image?: FirebaseImage;
+    likeCount?: number;
     // <optional fields>
     isModified?: boolean;
     modifiedAt?: Date;
@@ -51,5 +51,11 @@ export interface Product {
     homeDelivery?: boolean;
     dineIn?: boolean;
     // </optional fields>
+}
 
+export interface Filter {
+    orderType?: string;
+    isNonVeg?: boolean;
+    // cuisine?: string;
+    // category?: string;
 }

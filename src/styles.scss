@@ -6,6 +6,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     flex: auto;
 }
 
+mat-card {
+    max-width: 400px;
+}
+
 .fabAction{
   position: fixed;
   bottom: 20px;

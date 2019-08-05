@@ -1,0 +1,52 @@
+<mat-card *ngIf="fooditem as fi">
+  <div *ngIf="fooditem.image.url as previewURL">
+    <img mat-card-image [src]="previewURL" class="card-image">
+    <span class="price">CAD {{fi.price}}</span>
+  </div>
+
+  <div fxLayout="rwo wrap" fxLayoutAlign="space-between">
+    <span class="mat-h3" [style.color]="fi.isNonVeg? 'red':'green'">{{fi.title}}</span>
+    <div>
+      <mat-icon [color]="fi.likeCount?'accent':null">favorite_border</mat-icon>
+      <span class="align-with-icon">{{fi.likeCount?fi.likeCount:null}}</span>
+    </div>
+  </div>
+
+  <!-- <mat-card-content>
+    <span class="mat-h3">[ {{fi.category}} ] . [ {{fi.cuisine}} ]</span>
+    <br>
+    <span class="mat-h3">Availability: [ {{ fi.availability }} ]</span>
+  </mat-card-content> -->
+
+
+  <div fxLayout="row wrap" fxLayoutAlign="space-between">
+    <div>
+      <mat-icon>room_service</mat-icon>
+      <span>{{fi.serving}}</span>
+    </div>
+    <div>
+      <mat-icon>schedule</mat-icon>
+      <span>
+        {{fi.orderTime}} {{fi.orderType == 'instant'? 'mins':'hrs'}}
+      </span>
+    </div>
+
+    <!-- [fabIcon]="fooditem.createdBy.id === (this.auth.currUser$|async)?.uid?'edit':'add'" -->
+    <!-- <button mat-stroked-button color="primary">{{fi.createdBy.id === (this.auth.currUser$|async)?.uid?'Edit':'Request'"}}</button> -->
+    <button mat-stroked-button #action (click)="cardActionSelected(cardAction)" color="primary">{{cardAction}}</button>
+
+    <!-- <div>
+      <mat-icon color="primary">add</mat-icon>
+      <span class="align-with-icon">
+        Add
+      </span>
+    </div> -->
+
+    <!-- <div>
+      <mat-icon>place</mat-icon>
+      <span class="align-with-icon">1.0 km</span>
+    </div> -->
+
+  </div>
+
+</mat-card>
