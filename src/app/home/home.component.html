@@ -23,7 +23,7 @@
                         [formControl]="myControl"
                         appGooglePlaces
                         (addressFromGoogle)="collectUserGeoInfo($event)"
-                        (click)="userGeo=false">
+                        (click)="resetInput()">
                 </mat-form-field>
                 </div>
         </div>

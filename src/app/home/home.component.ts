@@ -11,9 +11,11 @@ import { Router } from '@angular/router';
 export class HomeComponent implements OnInit {
   myControl = new FormControl();
   userGeo: string;
+  userGeoSelected: boolean;
 
   constructor(private auth: AuthService, private router: Router) {
     this.userGeo = null;
+    this.userGeoSelected = false;
   }
 
   ngOnInit() {
@@ -22,6 +24,12 @@ export class HomeComponent implements OnInit {
   collectUserGeoInfo(geo) {
     console.log(geo);
     this.userGeo = geo;
+    this.userGeoSelected = true;
+  }
+
+  resetInput() {
+    this.userGeo = null;
+    this.myControl.reset();
   }
 
   googleSignIn() {

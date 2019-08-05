@@ -17,6 +17,7 @@ export class ProductManageComponent implements OnInit, AfterViewInit, OnDestroy 
   @ViewChild('stepper', {static: false}) stepper: MatStepper;
   unsubscribe$ = new Subject<void>();
   fooditem: Fooditem;
+  productStorageBucket: string;
   productForm: FormGroup;
   imageForm: FormGroup;
   serving: (string|number)[];
@@ -54,12 +55,15 @@ export class ProductManageComponent implements OnInit, AfterViewInit, OnDestroy 
     if (this.fooditem) {
       console.log('>>>> ExistingItem: Populate form with fooditem details. <<<<');
       this.isNewFooditem = false;
+      this.productStorageBucket = 'products\${this.fooditem.id}';
       this.rebuildProductForm(this.fooditem);
     }
     if (this.fooditem === undefined) {
       console.log('>>>> NewItem: Initailize empty form. <<<<');
       this.isNewFooditem = true;
       this.newItemID = this.productService.newFirebaseDocumentKey;
+      this.productStorageBucket = 'products\${this.newItemID}';
+
     }
 
     // Controlling form behaviour(previous, next)

@@ -4,7 +4,7 @@
 
       <mat-step label="Image" [stepControl]="imageForm">
         <form [formGroup]="imageForm">
-        <app-img-upload #upload [storageBucket]="productPath" (imageUploaded)="showImageDetails($event)">
+        <app-img-upload #upload [storageBucket]="productStorageBucket" (imageUploaded)="showImageDetails($event)">
         </app-img-upload>
           </form>
       </mat-step>
