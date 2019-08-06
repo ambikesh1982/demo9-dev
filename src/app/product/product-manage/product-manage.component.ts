@@ -57,6 +57,7 @@ export class ProductManageComponent implements OnInit, AfterViewInit, OnDestroy 
       this.isNewFooditem = false;
       this.productStorageBucket = 'products\${this.fooditem.id}';
       this.rebuildProductForm(this.fooditem);
+      this.rebuildImageForm(this.fooditem.image);
     }
     if (this.fooditem === undefined) {
       console.log('>>>> NewItem: Initailize empty form. <<<<');
@@ -103,6 +104,13 @@ export class ProductManageComponent implements OnInit, AfterViewInit, OnDestroy 
     });
   }
 
+  rebuildImageForm(image) {
+    console.log('Image details from existing fooditem: ', image);
+    Object.keys(this.imageForm.value).forEach(item => {
+      this.imageForm.get(`${item}`).patchValue(image[item]);
+    });
+  }
+
   rebuildProductForm(product: Fooditem): Fooditem {
     console.log('Populating productForm with input fooditem data.', product);
 
@@ -127,7 +135,7 @@ export class ProductManageComponent implements OnInit, AfterViewInit, OnDestroy 
   prepareProduct(imageData, productdata) {
     const fooditem = {
       isNew: this.isNewFooditem,
-      id: this.newItemID,
+      id: this.isNewFooditem ? this.newItemID : this.fooditem.id,
       title: productdata.title,
       price: productdata.price,
       isNonVeg: productdata.isNonVeg,
@@ -145,7 +153,7 @@ export class ProductManageComponent implements OnInit, AfterViewInit, OnDestroy 
     this.productService.addUpdateFooditem(fooditem)
     .then(_ => {
       this.router.navigate(['/']);
-    }).catch(e => console.error('addUpdateFooditem() Failed '));
+    }).catch(e => console.error('addUpdateFooditem() Failed ', e));
   }
 
   ngOnDestroy() {

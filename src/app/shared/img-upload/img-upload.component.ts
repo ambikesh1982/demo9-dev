@@ -11,7 +11,7 @@ interface Image {path: string; url: string; }
   styleUrls: ['./img-upload.component.scss']
 })
 export class ImgUploadComponent implements OnInit, OnDestroy {
-  @Input() image: string;
+  @Input() image: Image;
   @Input() storageBucket: string;
   @Output() imageUploaded = new EventEmitter<Image>();
   selectedFileCount: number;
@@ -32,6 +32,12 @@ export class ImgUploadComponent implements OnInit, OnDestroy {
    }
 
   ngOnInit() {
+    console.log('Image url from parent component: ', this.image);
+    if (this.image) {
+      this.currentImage = this.image;
+      this.downloadURL = this.image.url;
+      this.updateFileCount(1);
+    }
   }
 
   startUpload(imageFiles: FileList) {

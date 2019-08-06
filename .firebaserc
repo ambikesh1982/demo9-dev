@@ -1,9 +1,12 @@
 {
+  "projects": {
+    "default": "yummz9"
+  },
   "targets": {
-    "f00dz9-app": {
+    "yummz9": {
       "hosting": {
         "yummz9-dev": [
-          "f00dz9-app"
+          "yummz9"
         ]
       }
     }

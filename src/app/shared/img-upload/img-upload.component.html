@@ -1,6 +1,5 @@
 <mat-card>
-<div *ngIf="snapshot|async as snap">
-</div>
+<div *ngIf="snapshot|async as snap"></div>
   <div *ngIf="downloadURL as url">
     <img mat-card-image [src]="url">
     <button class="top-right" mat-icon-button (click)="deleteImage(url)">

@@ -6,6 +6,7 @@
   <app-product-card 
     *ngFor="let item of items" 
     [fooditem]=item
-    [cardAction]="item.createdBy.uid === (this.auth.currUser$|async)?.uid?'edit':'add'">
+    [cardAction]="item.createdBy.uid === (this.auth.currUser$|async)?.uid?'edit':'add'"
+    (cardActionClicked)="actUponCardAction($event,item.id)">
   </app-product-card>
 </div>
