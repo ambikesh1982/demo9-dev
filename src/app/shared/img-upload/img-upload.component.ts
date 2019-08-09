@@ -1,9 +1,9 @@
 import { Component, OnInit, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable, Subscription } from 'rxjs';
-import { tap, finalize, map } from 'rxjs/operators';
+import { tap, finalize } from 'rxjs/operators';
+import { ImageObj } from 'src/app/core/models';
 
-interface Image {path: string; url: string; }
 
 @Component({
   selector: 'app-img-upload',
@@ -11,13 +11,13 @@ interface Image {path: string; url: string; }
   styleUrls: ['./img-upload.component.scss']
 })
 export class ImgUploadComponent implements OnInit, OnDestroy {
-  @Input() image: Image;
+  @Input() image: ImageObj;
   @Input() storageBucket: string;
-  @Output() imageUploaded = new EventEmitter<Image>();
+  @Output() imageUploaded = new EventEmitter<ImageObj>();
   selectedFileCount: number;
   maxFileUploadCount: number;
-  imagesToBeDeleted: Image[];
-  currentImage: Image;
+  imagesToBeDeleted: ImageObj[];
+  currentImage: ImageObj;
 
   downloadURL: string;
   uploadPercent$: Observable<number>;
@@ -25,7 +25,7 @@ export class ImgUploadComponent implements OnInit, OnDestroy {
   snapshot;
 
   constructor(private storage: AngularFireStorage) {
-    this.storageBucket = 'productImages';
+    // this.storageBucket = 'productImages';
     this.imagesToBeDeleted = [];
     this.selectedFileCount = 0;
     this.maxFileUploadCount = 1;
@@ -33,12 +33,14 @@ export class ImgUploadComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     console.log('Image url from parent component: ', this.image);
-    if (this.image) {
+    if (this.image.url && this.image.path) {
       this.currentImage = this.image;
       this.downloadURL = this.image.url;
       this.updateFileCount(1);
     }
   }
+
+
 
   startUpload(imageFiles: FileList) {
     console.log('From fileController');
@@ -75,11 +77,11 @@ export class ImgUploadComponent implements OnInit, OnDestroy {
       this.downloadURL = null;
       this.imageUploaded.emit(null);
       this.uploadPercent$ = null;
-      this.cleanup(this.imagesToBeDeleted); // Todo: Remove the method.....
+      // this.cleanup(this.imagesToBeDeleted); // Todo: Remove the method.....
     }
   }
 
-  cleanup(images: Image[]) {
+  cleanup(images: ImageObj[]) {
     console.log(' #### Cleanup: Free storage for these images ####');
     images.forEach(image => {
       this.storage.ref(image.path).delete();

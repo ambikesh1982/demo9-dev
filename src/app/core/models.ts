@@ -14,10 +14,8 @@ export interface AppUser {
     hasWishlisth?: boolean;
 }
 
-export interface FirebaseImage {
-    path: string;
-    url: string;
-}
+
+export interface ImageObj { path: string; url: string; }
 
 export interface MiniUser {
     uid: string;
@@ -35,7 +33,7 @@ export interface Fooditem {
     createdAt?: Date;
     createdBy?: MiniUser;
     orderType?: string;
-    image?: FirebaseImage;
+    image?: ImageObj;
     likeCount?: number;
     // <optional fields>
     isModified?: boolean;

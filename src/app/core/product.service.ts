@@ -3,7 +3,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { switchMap, shareReplay, catchError } from 'rxjs/operators';
-import { Fooditem, Filter } from './models';
+import { Fooditem, Filter, ImageObj } from './models';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class ProductService {
   fooditems$: Observable<Fooditem[]>;
   fooditemRoot: string;
 
-  constructor(private afs: AngularFirestore) {
+  constructor(private afs: AngularFirestore, private storage: AngularFireStorage) {
     this.fooditemRoot = 'fooditems';
   }
 
@@ -84,10 +85,16 @@ export class ProductService {
   }
 
 
-  deleteFooditem(id: string): Promise<any> {
-    const productDoc = `${this.fooditemRoot}/${id}`;
+  deleteFooditem(fooditem: Fooditem): Promise<any> {
+    const productDoc = `${this.fooditemRoot}/${fooditem.id}`;
     return this.afs.doc<Fooditem>(productDoc).delete()
-      .then(_ => console.log('New fooditem deleted!!'))
+      .then(_ => {
+        console.log('1. Fooditem deleted>>>');
+        console.log('2. Cleaning storage>>> ', fooditem.image.path);
+        this.storage.ref(fooditem.image.path).delete();
+
+    })
       .catch(err => console.log('Error during delete fooditem: ', err));
   }
+
 }

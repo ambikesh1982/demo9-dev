@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { merge, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/core/auth.service';
-import { FirebaseImage, Fooditem } from 'src/app/core/models';
+import { Fooditem, ImageObj } from 'src/app/core/models';
 import { ProductService } from 'src/app/core/product.service';
 
 @Component({
@@ -37,7 +37,7 @@ export class ProductManageComponent implements OnInit, AfterViewInit, OnDestroy 
     this.createImageForm();
    }
 
-   showImageDetails(image: FirebaseImage) {
+   showImageDetails(image: ImageObj) {
      console.log('Image details: ', image);
      if (image) {
       this.imageForm.setValue({
@@ -55,15 +55,16 @@ export class ProductManageComponent implements OnInit, AfterViewInit, OnDestroy 
     if (this.fooditem) {
       console.log('>>>> ExistingItem: Populate form with fooditem details. <<<<');
       this.isNewFooditem = false;
-      this.productStorageBucket = 'products\${this.fooditem.id}';
-      this.rebuildProductForm(this.fooditem);
+      this.disableFabAction = false;
+      this.productStorageBucket = `products\${this.fooditem.id}`;
       this.rebuildImageForm(this.fooditem.image);
+      this.rebuildProductForm(this.fooditem);
     }
     if (this.fooditem === undefined) {
       console.log('>>>> NewItem: Initailize empty form. <<<<');
       this.isNewFooditem = true;
       this.newItemID = this.productService.newFirebaseDocumentKey;
-      this.productStorageBucket = 'products\${this.newItemID}';
+      this.productStorageBucket = `products\${this.newItemID}`;
 
     }
 
@@ -71,6 +72,7 @@ export class ProductManageComponent implements OnInit, AfterViewInit, OnDestroy 
     const mergedForms$ = merge(this.imageForm.statusChanges, this.productForm.statusChanges);
     mergedForms$.pipe(takeUntil(this.unsubscribe$))
       .subscribe(formStatus => {
+      console.log('formStatus ===', formStatus);
       if (formStatus === 'VALID') {
               this.disableFabAction = false;
             } else {
@@ -80,11 +82,11 @@ export class ProductManageComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   ngAfterViewInit() {
-    this.stepper.selectionChange.pipe(takeUntil(this.unsubscribe$))
-    .subscribe(c => {
-      this.disableFabAction = !c.selectedStep.completed;
-      console.log('From stepper >>>>', c.selectedStep.completed);
-    });
+    // this.stepper.selectionChange.pipe(takeUntil(this.unsubscribe$))
+    // .subscribe(c => {
+    //   this.disableFabAction = !c.selectedStep.completed;
+    //   console.log('From stepper >>>>', c.selectedStep.completed);
+    // });
   }
 
   createImageForm() {

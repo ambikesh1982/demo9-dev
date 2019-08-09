@@ -11,7 +11,7 @@
   <div *ngIf="selectedFileCount===0">
     <button mat-raised-button color="primary" style="float:initial; width: 100%" (click)="chooseFile.click()"
       [disabled]="selectedFileCount < maxFileUploadCount ? false: true ">
-      <mat-icon>file_upload</mat-icon>
+      <mat-icon>file_upload</mat-icon> Upload Image
     </button>
     <input #chooseFile style="display:none;" type="file" accept="image/.*,capture=camera"
       (change)="startUpload($event.target.files)">

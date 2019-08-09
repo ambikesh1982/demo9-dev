@@ -1,6 +1,58 @@
-<mat-card fxLayout="column" style="max-width: 500px">
+<mat-card fxLayout="column">
+
+      <form [formGroup]="imageForm">
+        <app-img-upload #upload [storageBucket]="productStorageBucket" [image]="imageForm.value"
+          (imageUploaded)="showImageDetails($event)">
+        </app-img-upload>
+      </form>
+
+      <br>
+
+      <form [formGroup]="productForm" fxLayout="column">
+        <mat-slide-toggle labelPosition="before" fxFlex="0 1 48" matInput formControlName="isNonVeg" required>Is Non-Veg
+        </mat-slide-toggle>
+        <br>
+
+        <mat-form-field class="product-full-width" appearance="outline">
+          <mat-label>Title</mat-label>
+          <input matInput type="text" required formControlName="title">
+        </mat-form-field>
+
+        <div fxLayout="row wrap" fxLayoutAlign="space-around stretch">
+
+          <mat-form-field fxFlex="0 1 30">
+            <input matInput type="number" placeholder="Price" formControlName="price" required>
+          </mat-form-field>
+
+          <mat-form-field fxFlex="0 1 30">
+            <mat-select placeholder="Serving" formControlName="serving" required>
+              <mat-option *ngFor="let serving of serving" [value]="serving">{{serving}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+
+        <h3>Order type</h3>
+        <mat-radio-group fxLayout="row" fxLayoutAlign="space-between" formControlName="orderType">
+          <mat-radio-button value="instant">Instant</mat-radio-button>
+          <mat-radio-button value="preOrder">Pre-Order</mat-radio-button>
+        </mat-radio-group>
+
+      </form>
+
+  <button mat-fab style="position: fixed; bottom:20px; right: 20px; z-index:99" (click)="stepperAction(stepper)"
+    [disabled]="disableFabAction">
+    <!-- <mat-icon>{{stepper.selectedIndex == 1? 'done':'arrow_forward'}}</mat-icon> -->
+    <mat-icon>done</mat-icon>
+  </button>
+</mat-card>
+
+
+
+
+<!-- <mat-card fxLayout="column" style="max-width: 500px">
   
-    <mat-horizontal-stepper #stepper class="stepper-height">
+    <mat-horizontal-stepper #stepper class="stepper-height" linear>
 
       <mat-step label="Image" [stepControl]="imageForm">
         <form [formGroup]="imageForm">
@@ -53,4 +105,4 @@
     (click)="stepperAction(stepper)" [disabled]="disableFabAction">
     <mat-icon>{{stepper.selectedIndex == 1? 'done':'arrow_forward'}}</mat-icon>
   </button>
-</mat-card>
+</mat-card> -->
