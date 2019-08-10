@@ -1,9 +1,6 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatStepper } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { merge, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/core/auth.service';
 import { Fooditem, ImageObj } from 'src/app/core/models';
 import { ProductService } from 'src/app/core/product.service';
@@ -13,13 +10,11 @@ import { ProductService } from 'src/app/core/product.service';
   templateUrl: './product-manage.component.html',
   styleUrls: ['./product-manage.component.scss']
 })
-export class ProductManageComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('stepper', {static: false}) stepper: MatStepper;
-  unsubscribe$ = new Subject<void>();
+export class ProductManageComponent implements OnInit, OnDestroy {
+
   fooditem: Fooditem;
   productStorageBucket: string;
   productForm: FormGroup;
-  imageForm: FormGroup;
   serving: (string|number)[];
   fabIcon: string;
   disableFabAction: boolean;
@@ -33,20 +28,7 @@ export class ProductManageComponent implements OnInit, AfterViewInit, OnDestroy 
               private router: Router) {
     this.disableFabAction = true;
     this.serving = [1, 2, 3, 4, '4+'];
-    this.createProductDetailForm();
-    this.createImageForm();
-   }
-
-   showImageDetails(image: ImageObj) {
-     console.log('Image details: ', image);
-     if (image) {
-      this.imageForm.setValue({
-        path: image.path,
-        url: image.url
-      });
-     } else {
-       this.imageForm.reset();
-     }
+    this.createProductForm();
    }
 
   ngOnInit() {
@@ -57,7 +39,6 @@ export class ProductManageComponent implements OnInit, AfterViewInit, OnDestroy 
       this.isNewFooditem = false;
       this.disableFabAction = false;
       this.productStorageBucket = `products\${this.fooditem.id}`;
-      this.rebuildImageForm(this.fooditem.image);
       this.rebuildProductForm(this.fooditem);
     }
     if (this.fooditem === undefined) {
@@ -67,37 +48,14 @@ export class ProductManageComponent implements OnInit, AfterViewInit, OnDestroy 
       this.productStorageBucket = `products\${this.newItemID}`;
 
     }
-
-    // Controlling form behaviour(previous, next)
-    const mergedForms$ = merge(this.imageForm.statusChanges, this.productForm.statusChanges);
-    mergedForms$.pipe(takeUntil(this.unsubscribe$))
-      .subscribe(formStatus => {
-      console.log('formStatus ===', formStatus);
-      if (formStatus === 'VALID') {
-              this.disableFabAction = false;
-            } else {
-              this.disableFabAction = true;
-            }
-    });
   }
 
-  ngAfterViewInit() {
-    // this.stepper.selectionChange.pipe(takeUntil(this.unsubscribe$))
-    // .subscribe(c => {
-    //   this.disableFabAction = !c.selectedStep.completed;
-    //   console.log('From stepper >>>>', c.selectedStep.completed);
-    // });
-  }
-
-  createImageForm() {
-    this.imageForm = this.fb.group({
+  createProductForm() {
+    this.productForm = this.fb.group({
+      image: this.fb.group({
         path: ['', Validators.required],
         url: ['', Validators.required],
-    });
-  }
-
-  createProductDetailForm() {
-    this.productForm = this.fb.group({
+      }),
       title: ['', Validators.required],
       price: [0.0, Validators.required],
       serving: [1, Validators.required],
@@ -106,11 +64,13 @@ export class ProductManageComponent implements OnInit, AfterViewInit, OnDestroy 
     });
   }
 
-  rebuildImageForm(image) {
-    console.log('Image details from existing fooditem: ', image);
-    Object.keys(this.imageForm.value).forEach(item => {
-      this.imageForm.get(`${item}`).patchValue(image[item]);
-    });
+  storeImageDetails(image: ImageObj) {
+    console.log('Image details: ', image);
+    if (image) {
+      this.productForm.get('image').setValue(image);
+    } else {
+      this.productForm.get('image').reset();
+    }
   }
 
   rebuildProductForm(product: Fooditem): Fooditem {
@@ -122,19 +82,8 @@ export class ProductManageComponent implements OnInit, AfterViewInit, OnDestroy 
     return product;
   }
 
-  stepperAction(stepper: MatStepper) {
 
-
-    if (stepper.selectedIndex === 1) {
-        this.prepareProduct(this.imageForm.value, this.productForm.value);
-    } else {
-      stepper.next();
-      this.disableFabAction = true;
-    }
-    console.log('Stepper event: ', stepper);
-  }
-
-  prepareProduct(imageData, productdata) {
+  prepareProduct(productdata) {
     const fooditem = {
       isNew: this.isNewFooditem,
       id: this.isNewFooditem ? this.newItemID : this.fooditem.id,
@@ -143,7 +92,7 @@ export class ProductManageComponent implements OnInit, AfterViewInit, OnDestroy 
       isNonVeg: productdata.isNonVeg,
       orderType: productdata.orderType,
       serving: productdata.serving,
-      image: {path: imageData.path, url: imageData.url},
+      image: productdata.image,
       likeCount: 0,
       createdAt: new Date(),
       createdBy: {
@@ -158,9 +107,13 @@ export class ProductManageComponent implements OnInit, AfterViewInit, OnDestroy 
     }).catch(e => console.error('addUpdateFooditem() Failed ', e));
   }
 
+  onPostFooditem(fromValue) {
+    this.prepareProduct(fromValue);
+  }
+
   ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    // this.unsubscribe$.next();
+    // this.unsubscribe$.complete();
   }
 
 }

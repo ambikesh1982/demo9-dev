@@ -1,14 +1,12 @@
 <mat-card fxLayout="column">
 
-      <form [formGroup]="imageForm">
-        <app-img-upload #upload [storageBucket]="productStorageBucket" [image]="imageForm.value"
-          (imageUploaded)="showImageDetails($event)">
+      <form [formGroup]="productForm" fxLayout="column">
+        <app-img-upload #upload [storageBucket]="productStorageBucket" [image]="productForm.get('image').value"
+          (imageUploaded)="storeImageDetails($event)">
         </app-img-upload>
-      </form>
+    
 
       <br>
-
-      <form [formGroup]="productForm" fxLayout="column">
         <mat-slide-toggle labelPosition="before" fxFlex="0 1 48" matInput formControlName="isNonVeg" required>Is Non-Veg
         </mat-slide-toggle>
         <br>
@@ -40,9 +38,9 @@
 
       </form>
 
-  <button mat-fab style="position: fixed; bottom:20px; right: 20px; z-index:99" (click)="stepperAction(stepper)"
-    [disabled]="disableFabAction">
-    <!-- <mat-icon>{{stepper.selectedIndex == 1? 'done':'arrow_forward'}}</mat-icon> -->
+  <button mat-fab style="position: fixed; bottom:20px; right: 20px; z-index:99"
+    (click) ="onPostFooditem(productForm.value)"
+    [disabled]="productForm.invalid">
     <mat-icon>done</mat-icon>
   </button>
 </mat-card>
