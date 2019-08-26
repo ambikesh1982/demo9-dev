@@ -1,0 +1,60 @@
+
+  <div *ngIf="myKitchen">
+    <mat-toolbar>
+      <mat-toolbar-row>
+      <button mat-icon-button>
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <span class="spacer"></span>
+      <span style="font-size: medium">{{myKitchen.name}}</span>
+      <span class="spacer"></span>
+      <button mat-icon-button>
+        <mat-icon>search</mat-icon>
+      </button>
+      </mat-toolbar-row>
+    </mat-toolbar>
+    <mat-card>
+      <mat-card-content style="text-align: center">
+      <p>{{myKitchen.cuisines}}</p>
+      <p>{{myKitchen.address}}</p>
+      </mat-card-content>
+      <mat-card-actions fxLayout="row wrap" fxLayoutAlign="space-between">
+        <mat-slide-toggle>Veg Only</mat-slide-toggle>
+        <div>
+          <mat-icon>favorite_border</mat-icon>
+          <span> 100</span>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+    
+    <div *ngIf="foodPosts$|async as items">
+      <mat-toolbar style="font-size: medium">
+        <span>Items</span>
+        <span class="spacer"></span>
+        <span>[ 2 ]</span>
+        <span class="spacer"></span>
+        <span>CAD 20</span>
+      </mat-toolbar>
+      <mat-list>
+        <!-- <h3 mat-header>Folders</h3> -->
+        <mat-list-item *ngFor="let item of items">
+          <mat-icon mat-list-icon [color]="item.isNonVeg? 'warn':'primary'">adjust</mat-icon>
+          <h4 mat-line>{{item.title}}</h4>
+          <p mat-line>
+            [ CAD {{item.price}} ]
+          </p>
+
+          <button mat-icon-button>
+            <mat-icon>remove</mat-icon>
+          </button>
+          <span>2</span>
+          <button mat-icon-button>
+            <mat-icon>add</mat-icon>
+          </button>
+        </mat-list-item>
+      </mat-list>
+    </div>
+    <button mat-fab style="position: fixed; bottom:20px; right: 20px; z-index:99">
+      <mat-icon>chat</mat-icon>
+    </button>
+  </div>

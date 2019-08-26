@@ -9,6 +9,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ProductResolver } from './product.resolver';
+import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { AuthGuard } from '../core/auth.guard';
 
 
 const productRoutes: Routes = [
@@ -20,6 +22,13 @@ const productRoutes: Routes = [
     resolve: { product: ProductResolver }
   },
   {
+    path: 'add-product/:id',
+    component: ProductDetailComponent,
+    data: { title: 'PRODUCT_DETAIL_PAGE' },
+    canActivate: [AuthGuard],
+    resolve: { product: ProductResolver }
+  },
+  {
     path: '',
     component: ProductListComponent,
     data: { title: 'PRODUCT_LIST_PAGE' },
@@ -27,7 +36,7 @@ const productRoutes: Routes = [
 ];
 
 @NgModule({
-  declarations: [ProductListComponent, ProductManageComponent],
+  declarations: [ProductListComponent, ProductManageComponent, ProductDetailComponent],
   imports: [
     CommonModule,
     MaterialModule,

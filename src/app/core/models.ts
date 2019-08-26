@@ -57,3 +57,20 @@ export interface Filter {
     // cuisine?: string;
     // category?: string;
 }
+
+export interface IOrder {
+    buyer: { uid: string, displayName: string };
+    seller: { uid: string, displayName: string };
+    items: IOrderItem[];
+    currState: string;
+    updateTime: Date;
+    total: number;
+}
+
+export interface IOrderItem {
+    id: string;
+    title?: string;
+    isNonVeg: boolean;
+    qty?: number;
+    price?: number;
+}

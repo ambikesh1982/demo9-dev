@@ -35,6 +35,10 @@ const routes: Routes = [
   { path: 'login',
     loadChildren: () => import('./login/login.module').then(m => m.LoginModule)
    },
+  {
+    path: 'kitchen',
+    loadChildren: () => import('./kitchen/kitchen.module').then(m => m.KitchenModule)
+  },
   { path: '',
     loadChildren: () => import('./product/product.module').then(m => m.ProductModule),
     // canActivate:[AuthGuard]

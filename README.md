@@ -27,6 +27,19 @@ Flow -
         3. Add/Remove filters
         4. Navigation (Seller's kitchen)
     Guard: userAuth<Anonymous>
+    ----------------------------------------------------------------------------------------------
+
+    IKitchen {
+        ownerId: string;
+        kitcheId: string;
+        kitcheName: string;
+        photoUrl: string;
+        category: string;
+        vegOnly: boolean;
+        locationInfo: IGeoInfo;
+    }
+
+    
 
     
 

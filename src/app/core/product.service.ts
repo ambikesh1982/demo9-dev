@@ -16,7 +16,7 @@ export class ProductService {
   fooditemRoot: string;
 
   constructor(private afs: AngularFirestore, private storage: AngularFireStorage) {
-    this.fooditemRoot = 'fooditems';
+    this.fooditemRoot = 'kitchen';
   }
 
   // ..... Firebase getter methods ..... //
@@ -53,7 +53,7 @@ export class ProductService {
 
 
   getFooditemList(): Observable<Fooditem[]> {
-    return this.afs.collection<Fooditem>(this.fooditemRoot).valueChanges();
+    return this.afs.collection<Fooditem>(this.fooditemRoot).valueChanges({idField: 'docId'});
   }
 
   applyFilter(filter: Filter) {
@@ -96,5 +96,16 @@ export class ProductService {
     })
       .catch(err => console.log('Error during delete fooditem: ', err));
   }
+
+  createOrder(fooditem: Fooditem) {
+    const addQty = firebase.firestore.FieldValue.increment(1);
+    const reduceQty = firebase.firestore.FieldValue.increment(-1);
+    const addPrice = firebase.firestore.FieldValue.increment(fooditem.price);
+    const reducePrice = firebase.firestore.FieldValue.increment(fooditem.price * -1);
+    // Check if item exit?
+
+  }
+
+  isItemExist(itemId: string) {  }
 
 }

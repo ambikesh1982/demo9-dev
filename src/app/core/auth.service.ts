@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 // import { AppUser } from './models';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { first, tap, switchMap, startWith } from 'rxjs/operators';
+import { first, tap, switchMap, startWith, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { auth } from 'firebase';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
@@ -50,9 +50,16 @@ export class AuthService {
     return this.db.doc<AppUser>(userDoc).valueChanges();
   }
 
-  getCurrentUser(): Promise<AppUser> {
+  async getCurrentUser(): Promise<AppUser> {
     return this.currUser$.pipe(first()).toPromise();
   }
+
+  async currUserId() {
+    return this.af.authState.pipe(
+      map(authState => (authState ? authState.uid : null))
+    );
+  }
+
 
   async upgradeAnonymosToSocial() {
     const provider = new auth.GoogleAuthProvider();
@@ -139,7 +146,7 @@ export class AuthService {
   async signOut() {
     await this.af.auth.signOut();
     // this.notify.openSnackBar('We will miss you!');
-    this.router.navigate(['/']);
+    this.router.navigate(['home']);
   }
 
 

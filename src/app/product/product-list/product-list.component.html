@@ -1,4 +1,4 @@
-<div 
+<!-- <div 
   *ngIf="fooditems|async as items" 
   fxLayout="row wrap" 
   fxLayout.xs="column"
@@ -7,6 +7,23 @@
     *ngFor="let item of items" 
     [fooditem]=item
     [cardAction]="item.createdBy.uid === (this.auth.currUser$|async)?.uid?'edit':'add'"
-    (cardActionClicked)="actUponCardAction($event,item.id)">
+    (cardActionClicked)="actUponCardAction($event,item)">
   </app-product-card>
+</div> -->
+
+<div *ngIf="fooditems|async as items" fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="space-around stretch">
+  <!-- <app-product-card *ngFor="let item of items" [fooditem]=item
+    (cardActionClicked)="actUponCardAction($event,item)">
+  </app-product-card> -->
+  <mat-card *ngFor="let item of items" [routerLink]="['/kitchen/', item.docId]">
+    <mat-card-title-group>
+      <!-- <h4>{{item.name}}</h4> -->
+      <mat-card-title>{{item.name}}</mat-card-title>
+      <mat-card-subtitle>{{item.cuisines}}</mat-card-subtitle>
+      <!-- <mat-card-subtitle>{{item.address}}</mat-card-subtitle> -->
+
+      <mat-card-subtitle><mat-icon>star</mat-icon> 4.5</mat-card-subtitle>
+      <img mat-card-md-image [src]="item.image.url" align="">
+    </mat-card-title-group>
+  </mat-card>
 </div>

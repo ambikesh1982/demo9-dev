@@ -38,7 +38,7 @@ export class ProductManageComponent implements OnInit, OnDestroy {
       console.log('>>>> ExistingItem: Populate form with fooditem details. <<<<');
       this.isNewFooditem = false;
       this.disableFabAction = false;
-      this.productStorageBucket = `products\${this.fooditem.id}`;
+      this.productStorageBucket = `products/${this.fooditem.id}`;
       this.rebuildProductForm(this.fooditem);
     }
     if (this.fooditem === undefined) {
@@ -46,7 +46,6 @@ export class ProductManageComponent implements OnInit, OnDestroy {
       this.isNewFooditem = true;
       this.newItemID = this.productService.newFirebaseDocumentKey;
       this.productStorageBucket = `products\${this.newItemID}`;
-
     }
   }
 
