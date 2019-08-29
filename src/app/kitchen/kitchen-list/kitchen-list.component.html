@@ -1,0 +1,10 @@
+<ng-template #emptyList>
+  <p>No kitchens to fetch...</p>
+</ng-template>
+<div *ngIf="kitchens$|async as kitchens else emptyList">
+  <mat-card 
+    *ngFor="let kitchen of kitchens"
+    [routerLink]="[kitchen.kid]">
+    {{kitchen.title}} | {{kitchen.address}} | {{kitchen.postCount}}
+  </mat-card>
+</div>

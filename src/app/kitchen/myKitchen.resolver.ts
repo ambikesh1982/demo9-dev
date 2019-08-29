@@ -14,8 +14,8 @@ export class MyKitchenResolver implements Resolve<any> {
     private router: Router) { }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Fooditem> {
-    const uid = route.paramMap.get('uid');
-    return this.ks.getKitchenDetails(uid).pipe(
+    const kid = route.paramMap.get('kid');
+    return this.ks.getKitchenDetails(kid).pipe(
       delay(2000), // added a delay to test loading spinner. To be removed later.
       take(1),
       tap(resp => {

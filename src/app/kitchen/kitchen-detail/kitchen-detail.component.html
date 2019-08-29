@@ -1,11 +1,11 @@
-<div *ngIf="myKitchen">
+<div *ngIf="kitchen">
   <mat-toolbar>
     <mat-toolbar-row>
       <button mat-icon-button>
         <mat-icon>arrow_back</mat-icon>
       </button>
       <span class="spacer"></span>
-      <span style="font-size: medium">{{myKitchen.name}}</span>
+      <span style="font-size: medium">{{kitchen.title}}</span>
       <span class="spacer"></span>
       <button mat-icon-button>
         <mat-icon>search</mat-icon>
@@ -14,11 +14,13 @@
   </mat-toolbar>
   <mat-card>
     <mat-card-content style="text-align: center">
-      <p>{{myKitchen.cuisines}}</p>
-      <p>{{myKitchen.address}}</p>
+      <p>{{kitchen.description}}</p>
+      <p>{{kitchen.address}}</p>
     </mat-card-content>
     <mat-card-actions fxLayout="row wrap" fxLayoutAlign="space-between">
-      <mat-slide-toggle>Veg Only</mat-slide-toggle>
+
+      <mat-slide-toggle *ngIf="kitchen.pureVeg" checked disabled>Pure veg</mat-slide-toggle>
+      <mat-slide-toggle *ngIf="!kitchen.pureVeg">Veg only!</mat-slide-toggle>
       <div>
         <mat-icon>favorite_border</mat-icon>
         <span> 100</span>
@@ -26,17 +28,17 @@
     </mat-card-actions>
   </mat-card>
 
-  <div *ngIf="myOrder as items">
-    <mat-toolbar style="font-size: medium">
+  <div *ngIf="menuItems$|async as items">
+    <mat-toolbar *ngIf="summary" style="font-size: medium">
       <span>Items</span>
       <span class="spacer"></span>
-      <span>[ {{itemsInOrder}} ]</span>
+      <span>[ {{summary.count}} ]</span>
       <span class="spacer"></span>
-      <span>CAD {{orderValue}}</span>
+      <span>CAD {{summary.total}}</span>
     </mat-toolbar>
     <mat-list>
 
-      <mat-list-item *ngFor="let item of items; let i = index; trackBy: trackItem">
+      <mat-list-item *ngFor="let item of items">
         <mat-icon mat-list-icon [color]="item.isNonVeg? 'warn':'accent'">adjust</mat-icon>
         <h4 mat-line>{{item.title}}</h4>
         <p mat-line>
@@ -61,9 +63,9 @@
     </mat-list>
   </div>
   <button 
-    (click)="prepareOrder()"
-    mat-fab 
-    style="position: fixed; bottom:20px; right: 20px; z-index:99">
+    (click)="prepareOrder()" 
+    mat-fab style="position: fixed; bottom:20px; right: 20px; z-index:99"
+    [disabled]="summary.count === 0">
     <mat-icon>done</mat-icon>
   </button>
 </div>
