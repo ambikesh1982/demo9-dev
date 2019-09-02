@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { KitchenService } from '../kitchen.service';
 import { Observable } from 'rxjs';
 import { IKitchen } from '../kitchen';
+import { NavigationComponent } from '../../navigation/navigation.component';
 
 @Component({
   selector: 'app-kitchen-list',

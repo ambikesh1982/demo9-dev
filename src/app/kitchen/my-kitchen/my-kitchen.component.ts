@@ -1,61 +1,73 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { KitchenService } from '../kitchen.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Location } from '@angular/common';
+import { IMenuItem } from '../kitchen';
 import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-my-kitchen',
   templateUrl: './my-kitchen.component.html',
   styleUrls: ['./my-kitchen.component.scss']
 })
+
 export class MyKitchenComponent implements OnInit {
   myKitchen: any;
-  foodPosts$: any;
-  selectedItems: any;
-  myOrder: {}[];
-  itemsInOrder = 0;
-  orderValue = 0;
+  menuItems$: Observable<IMenuItem[]>;
+  menuForm: FormGroup;
+  menu: IMenuItem;
+  kitchenId: string;
+  hasMenuItems: boolean;
 
-  constructor(private route: ActivatedRoute, private ks: KitchenService) {
-    this.myOrder = [];
+
+  constructor(
+    private route: ActivatedRoute,
+    private ks: KitchenService,
+    private location: Location,
+    private fb: FormBuilder) {
+      this.createMenuForm();
    }
 
   ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+      this.kitchenId = params.get('kid');
+    });
+
     this.myKitchen = this.route.snapshot.data.myKitchen;
-    this.foodPosts$ = this.ks.getFoodPosts(this.myKitchen.id).pipe(
-      tap(items => {
-          items.forEach(item => {
-            this.myOrder.push(item);
-          });
-          console.log('foodPosts>>', this.myOrder);
-      })
-    ).subscribe();
+    this.menuItems$ = this.ks.getMenuItems(this.kitchenId).pipe(
+      tap( resp => this.hasMenuItems = !!resp)
+    );
   }
 
-  trackItem(index: number, item: any) {
-    // console.log('trackItem', item.fid);
-    return item ? item.fid : null;
-  }
-
-  updateMyOrder(id: string, qty: number) {
-    const index = this.myOrder.findIndex(i => i.id === id);
-    this.myOrder[index].qty = this.myOrder[index].qty + qty;
-    console.log('index>> ', this.myOrder[index]);
-    this.orderReducer();
-  }
-
-  orderReducer(): {}[] {
-    const myOrder = this.myOrder.filter(i => i.qty > 0);
-    this.itemsInOrder = myOrder.map(i => i.qty).reduce((a,c) => a + c, 0);
-    this.orderValue = myOrder.map(i => i.qty * i.price).reduce((a, t) => a + t, 0);
-    return myOrder;
-  }
-
-  prepareOrder() {
-    const order = {}
-    console.log('MyOrder: ', this.orderReducer());
+  createMenuForm() {
+    this.menuForm = this.fb.group({
+      title: ['', Validators.required],
+      price: [0.0, Validators.required],
+      isNonVeg: [true, Validators.required],
+      qty: [0, Validators.required],
+    });
   }
 
 
+  addMenuItem(kid: string, dataFromMenuForm) {
+    const menu = dataFromMenuForm;
+    menu.createdAt = this.ks.serverTimestampFromFirestore;
+    this.ks.createMenuItem(this.kitchenId, menu)
+      .then(resp => {
+        console.log('Menu item added: ', resp.id);
+        this.menuForm.reset();
+      });
+    console.log('Data from menu form: ', this.kitchenId, '-', dataFromMenuForm);
+  }
+
+  removeMenuItem(id) {
+    console.error('TODO: Remove menu item: ', id);
+  }
+
+  goBack() {
+    this.location.back();
+  }
 
 }

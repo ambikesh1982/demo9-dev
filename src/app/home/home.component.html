@@ -12,23 +12,10 @@
             <div style="margin:8px">
                 <h1>Hungry?</h1>
                 <h2>Find home cooked food near you...</h2>
-            </div>
-
-            <div>
-                <mat-form-field style="width:100%; max-width: 400px;" appearance="outline">
-                    <mat-label>Enter your address...</mat-label>
-                    <input
-                        type="text" 
-                        matInput 
-                        [formControl]="myControl"
-                        appGooglePlaces
-                        (addressFromGoogle)="collectUserGeoInfo($event)"
-                        (click)="resetInput()">
-                </mat-form-field>
                 </div>
         </div>
     </div>
-    <button mat-fab [disabled]="!userGeo" style="position: fixed; bottom:20px; right: 20px" (click)="enterTheApp()">
+    <button mat-fab style="position: fixed; bottom:20px; right: 20px" (click)="enterTheApp()">
         <mat-icon>done</mat-icon>
     </button>
 </div>

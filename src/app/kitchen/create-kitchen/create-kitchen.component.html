@@ -1,0 +1,48 @@
+<div>
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <span style="font-size: medium">{{kitchenForm.value.title ? kitchenForm.value.title : 'New*'}}</span>
+      <span class="spacer"></span>
+      <button mat-icon-button>
+        <mat-icon>clear</mat-icon>
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <mat-card>
+    <form [formGroup]="kitchenForm" fxLayout="column">
+
+      <mat-form-field class="product-full-width">
+        <mat-label>Title</mat-label>
+        <input matInput type="text" required formControlName="title"
+          placeholder="Enter kitchen name...">
+      </mat-form-field>
+
+      <mat-form-field class="product-full-width">
+        <mat-label>Description</mat-label>
+        <textarea matInput type="text" required formControlName="description"
+          placeholder="Write something about your kitchen..."></textarea>
+      </mat-form-field>
+
+      <mat-form-field class="product-full-width" appearance="outline">
+        <mat-label>Enter your address...</mat-label>
+        <input type="text" matInput formControlName="address" appGooglePlaces
+          (addressFromGoogle)="addAddress($event)" (click)="resetInput()">
+      </mat-form-field>
+
+      <app-img-upload #upload [storageBucket]="productStorageBucket" (imageUploaded)="storeImageDetails($event)">
+      </app-img-upload>
+
+    </form>
+
+  </mat-card>
+
+  <button mat-fab style="position: fixed; bottom:20px; right: 20px; z-index:99" 
+    (click)="createKitchen(kitchenForm.value)">
+    <mat-icon>done</mat-icon>
+  </button>
+  <!-- <button mat-fab style="position: fixed; bottom:20px; right: 20px; z-index:99" (click)="createKitchen(kitchenForm.value)"
+    [disabled]="kitchenForm.invalid">
+    <mat-icon>done</mat-icon>
+  </button> -->
+</div>

@@ -1,20 +1,17 @@
 <div *ngIf="myKitchen">
   <mat-toolbar>
     <mat-toolbar-row>
-      <button mat-icon-button>
+      <span style="font-size: medium">{{myKitchen.title}}</span>
+      <span class="spacer"></span>
+      <button mat-icon-button (click)="goBack()">
         <mat-icon>arrow_back</mat-icon>
-      </button>
-      <span class="spacer"></span>
-      <span style="font-size: medium">{{myKitchen.name}}</span>
-      <span class="spacer"></span>
-      <button mat-icon-button>
-        <mat-icon>search</mat-icon>
       </button>
     </mat-toolbar-row>
   </mat-toolbar>
+
   <mat-card>
     <mat-card-content style="text-align: center">
-      <p>{{myKitchen.cuisines}}</p>
+      <p>{{myKitchen.description}}</p>
       <p>{{myKitchen.address}}</p>
     </mat-card-content>
     <mat-card-actions fxLayout="row wrap" fxLayoutAlign="space-between">
@@ -26,44 +23,51 @@
     </mat-card-actions>
   </mat-card>
 
-  <div *ngIf="myOrder as items">
-    <mat-toolbar style="font-size: medium">
-      <span>Items</span>
-      <span class="spacer"></span>
-      <span>[ {{itemsInOrder}} ]</span>
-      <span class="spacer"></span>
-      <span>CAD {{orderValue}}</span>
-    </mat-toolbar>
-    <mat-list>
+  <mat-card>
+    <form [formGroup]="menuForm" fxLayout="column">
+      <mat-form-field class="product-full-width">
+        <input matInput type="text" required formControlName="title" placeholder="Add menu item...">
+      </mat-form-field>
+      <div *ngIf="menuForm.value.title" fxFlexLayout="row wrap" fxLayoutAlign="space-between stretch">
+        <mat-slide-toggle labelPosition="before" matInput formControlName="isNonVeg" required>Is Non-Veg
+        </mat-slide-toggle>
+        <mat-form-field fxFlex="0 1 30">
+          <input matInput type="number" formControlName="price" required>
+          <span matPrefix>$&nbsp;</span>
+          <span matSuffix>.00</span>
+        </mat-form-field>
+      </div>
+  
+    </form>
+  
+    <mat-card-actions *ngIf="menuForm.value.title" align="right">
+      <button mat-stroked-button>
+        Cancel
+      </button>
+      <button mat-stroked-button [disabled]="menuForm.invalid" (click)="addMenuItem(myKitchen.kid, menuForm.value)">
+        Save
+      </button>
+    </mat-card-actions>
+  </mat-card>
 
-      <mat-list-item *ngFor="let item of items; let i = index; trackBy: trackItem">
+  
+    <mat-list *ngIf="menuItems$|async as items" style="background-color: black;">
+      <mat-list-item *ngFor="let item of items">
         <mat-icon mat-list-icon [color]="item.isNonVeg? 'warn':'accent'">adjust</mat-icon>
-        <h4 mat-line>{{item.title}}</h4>
+        <p mat-line>{{item.title}}</p>
         <p mat-line>
           [ CAD {{item.price}} ]
         </p>
-
-        <div *ngIf="item.qty === 0 else inOrder">
-          <button mat-stroked-button (click)="updateMyOrder(item.id, 1)">Add</button>
-        </div>
-
-        <ng-template #inOrder>
-          <button mat-icon-button (click)="updateMyOrder(item.id, -1)">
-            <mat-icon>remove</mat-icon>
-          </button>
-          <span>{{item.qty}}</span>
-          <button mat-icon-button (click)="updateMyOrder(item.id, 1)">
-            <mat-icon>add</mat-icon>
-          </button>
-        </ng-template>
-
+        <button mat-icon-button (click)="removeMenuItem(item.id)">
+          <mat-icon>remove_circle_outline</mat-icon>
+        </button>
       </mat-list-item>
     </mat-list>
-  </div>
-  <button 
-    (click)="prepareOrder()"
-    mat-fab 
-    style="position: fixed; bottom:20px; right: 20px; z-index:99">
+    
+    <mat-divider></mat-divider>
+    
+
+  <!-- <button (click)="addMenuItem()" mat-fab style="position: fixed; bottom:20px; right: 20px; z-index:99">
     <mat-icon>done</mat-icon>
-  </button>
+  </button> -->
 </div>

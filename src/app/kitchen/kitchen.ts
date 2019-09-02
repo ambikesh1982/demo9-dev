@@ -1,23 +1,26 @@
+import * as firebase from 'firebase';
+
 export interface IKitchen {
-    kid: string;
+    // kid: string;
     ownerId: string;
     title: string;
     address: string;
     image: { path: string, url: string };
     description: string;
-    pureVeg: boolean;
-    postCount: number;
+    // pureVeg: boolean;
+    menuItemsCount: number;
     likeCount: number;
-    createdAt?: Date;
+    createdAt: firebase.firestore.FieldValue;
+    id?: string;
 }
 
 export interface IMenuItem {
-    id: string;
     title: string;
     price: number;
     isNonVeg: boolean;
     qty: number;
-    createdAt?: Date;
+    id?: string;
+    createdAt?: firebase.firestore.FieldValue;
 }
 
 export interface IOrder {

@@ -5,6 +5,7 @@ import { IKitchen, IMenuItem, IOrder } from '../kitchen';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { isNgTemplate } from '@angular/compiler';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-kitchen-detail',
@@ -17,15 +18,25 @@ export class KitchenDetailComponent implements OnInit {
   menuItems: IMenuItem[];
   order: IOrder;
   summary: {count: number, total: number};
+  kitchenId;
 
-  constructor(private route: ActivatedRoute, private ks: KitchenService) {
+  constructor(
+    private route: ActivatedRoute,
+    private ks: KitchenService,
+    private location: Location) {
     this.summary = {count: 0, total: 0};
    }
 
   ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+      this.kitchenId = params.get('kid');
+    });
     this.kitchen = this.route.snapshot.data.myKitchen;
-    this.menuItems$ = this.ks.getMenuItems(this.kitchen.kid).pipe(
-      tap(items => this.menuItems = items)
+    this.menuItems$ = this.ks.getMenuItems(this.kitchenId).pipe(
+      tap(items => {
+        this.menuItems = items;
+        console.log('menuItems >>>', items);
+      })
     );
   }
 
@@ -37,7 +48,7 @@ export class KitchenDetailComponent implements OnInit {
 
     const order: IOrder = {
       buyerInfo: {uid: '123456', name: 'temp'},
-      kitchenInfo: {kid: this.kitchen.kid, name: this.kitchen.title},
+      kitchenInfo: {kid: this.kitchen.id, name: this.kitchen.title},
       orderValue: this.summary.total,
       itemsCount: this.summary.count,
       items: itemsToOrder
@@ -57,5 +68,8 @@ export class KitchenDetailComponent implements OnInit {
     console.log('My Order >> ', this.order);
   }
 
+  goBack() {
+    this.location.back();
+  }
 
 }

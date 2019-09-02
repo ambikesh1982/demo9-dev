@@ -5,20 +5,24 @@ import { MaterialModule } from '../material/material.module';
 import { ImgUploadComponent } from './img-upload/img-upload.component';
 import { ProductCardComponent } from './product-card/product-card.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { AppShellComponent } from './app-shell/app-shell.component';
+import { RouterModule } from '@angular/router';
 
 
 const SHARED_COMPONENTS = [
+  AppShellComponent,
   ProductCardComponent,
   GooglePlacesDirective,
   ImgUploadComponent,
 ];
 
 @NgModule({
-  declarations: [GooglePlacesDirective, ImgUploadComponent, ProductCardComponent],
+  declarations: [GooglePlacesDirective, ImgUploadComponent, ProductCardComponent, AppShellComponent],
   imports: [
     CommonModule,
     FlexLayoutModule,
-    MaterialModule
+    MaterialModule,
+    RouterModule
   ],
   exports: [SHARED_COMPONENTS]
 })

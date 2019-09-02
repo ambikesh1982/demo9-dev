@@ -8,12 +8,29 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { AuthGuard } from '../core/auth.guard';
 import { KitchenListComponent } from './kitchen-list/kitchen-list.component';
 import { KitchenDetailComponent } from './kitchen-detail/kitchen-detail.component';
+import { CreateKitchenComponent } from './create-kitchen/create-kitchen.component';
+import { SocialGuard } from '../core/social.guard';
+import { SharedModule } from '../shared/shared.module';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 const kitchenRoutes: Routes = [
   { path: ':kid',
     component: KitchenDetailComponent,
     canActivate: [AuthGuard],
     resolve: {myKitchen: MyKitchenResolver}
+  },
+  {
+    path: 'kitchen/new',
+    component: CreateKitchenComponent,
+    canActivate: [SocialGuard],
+    resolve: { myKitchen: MyKitchenResolver }
+  },
+  {
+    path: 'my-kitchen/:kid',
+    component: MyKitchenComponent,
+    canActivate: [SocialGuard],
+    resolve: { myKitchen: MyKitchenResolver }
   },
   {
     path: '',
@@ -24,11 +41,13 @@ const kitchenRoutes: Routes = [
 ];
 
 @NgModule({
-  declarations: [MyKitchenComponent, KitchenListComponent, KitchenDetailComponent],
+  declarations: [MyKitchenComponent, KitchenListComponent, KitchenDetailComponent, CreateKitchenComponent],
   imports: [
     CommonModule,
     MaterialModule,
     FlexLayoutModule,
+    ReactiveFormsModule,
+    SharedModule,
     RouterModule.forChild(kitchenRoutes),
   ],
   providers: [MyKitchenResolver]
