@@ -12,18 +12,19 @@ import { CreateKitchenComponent } from './create-kitchen/create-kitchen.componen
 import { SocialGuard } from '../core/social.guard';
 import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { KitchenGuard } from './kitchen.guard';
 
 
 const kitchenRoutes: Routes = [
   { path: ':kid',
     component: KitchenDetailComponent,
-    canActivate: [AuthGuard],
+    // canActivate: [AuthGuard],
     resolve: {myKitchen: MyKitchenResolver}
   },
   {
     path: 'kitchen/new',
     component: CreateKitchenComponent,
-    canActivate: [SocialGuard],
+    canActivate: [SocialGuard, KitchenGuard],
     resolve: { myKitchen: MyKitchenResolver }
   },
   {
@@ -50,6 +51,6 @@ const kitchenRoutes: Routes = [
     SharedModule,
     RouterModule.forChild(kitchenRoutes),
   ],
-  providers: [MyKitchenResolver]
+  providers: [MyKitchenResolver, KitchenGuard]
 })
 export class KitchenModule { }

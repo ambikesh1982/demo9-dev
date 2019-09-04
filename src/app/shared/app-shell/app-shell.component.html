@@ -1,4 +1,4 @@
-<mat-sidenav-container class="sidenav-container">
+<mat-sidenav-container class="sidenav-container" fullscreen>
   <mat-sidenav #drawer class="sidenav" fixedInViewport [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
     mode="over" [opened]="(isHandset$ | async) === false">
     <div *ngIf="auth.currUser$ | async as user">
@@ -42,7 +42,7 @@
     </div>
   </mat-sidenav>
 
-  <mat-sidenav-content>
+  <mat-sidenav-content fxLayout="column">
     <mat-toolbar>
       <button
         type="button"
@@ -56,6 +56,6 @@
       <mat-icon>share</mat-icon>
     </mat-toolbar>
     <!-- Add Content Here -->
-    <ng-content></ng-content>
+    <ng-content fxFlex></ng-content>
   </mat-sidenav-content>
 </mat-sidenav-container>

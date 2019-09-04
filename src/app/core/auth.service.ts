@@ -1,19 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-// import { AppUser } from './models';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { first, tap, switchMap, startWith, map } from 'rxjs/operators';
-import { Router } from '@angular/router';
-import { auth } from 'firebase';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
 import * as firebase from 'firebase';
+import { auth } from 'firebase';
+import { Observable, of } from 'rxjs';
+import { first, map, switchMap, tap, startWith } from 'rxjs/operators';
 
 interface AppUser {
   uid: string;
   isAnonymous: boolean;
+  kitchenId?: string;
   displayName?: string;
   photoURL?: string;
-  address?: string;
 }
 
 @Injectable({
@@ -27,18 +26,20 @@ export class AuthService {
 
   constructor(private db: AngularFirestore, private af: AngularFireAuth, private router: Router) {
     this.currUser$ = this.af.authState.pipe(
-      switchMap( user => {
+      switchMap( (user: AppUser) => {
         if (user) {
-          console.log('Raw User-info from firebase-auth: ', user);
           return this.getAppUser(user.uid).pipe(
-          tap( cu => this.currUser = cu )
+          tap( cu => {
+            this.currUser = cu;
+            console.log('User-info from firebase-auth: ', this.currUser);
+          })
           );
         } else {
           this.currUser = null;
           return of(null);
         }
       }),
-      tap(user => localStorage.setItem('app-user', JSON.stringify(user))),
+      // tap(user => localStorage.setItem('app-user', JSON.stringify(user))),
       // startWith(JSON.parse(localStorage.getItem('app-user')))
     );
   }
@@ -54,18 +55,11 @@ export class AuthService {
     return this.currUser$.pipe(first()).toPromise();
   }
 
-  async currUserId() {
-    return this.af.authState.pipe(
-      map(authState => (authState ? authState.uid : null))
-    );
-  }
 
 
   async upgradeAnonymosToSocial() {
     const provider = new auth.GoogleAuthProvider();
-    const credential: firebase.auth.UserCredential = await this.af.auth.signInWithPopup(
-      provider
-    );
+    const credential = await this.af.auth.signInWithPopup(provider);
     this.af.auth.currentUser.linkWithPopup(provider).then(resp => {
       console.log('ToDo: Update User info');
       const upgradedUser: AppUser = {
@@ -76,7 +70,10 @@ export class AuthService {
       };
       this.addUpdateUserDB(upgradedUser);
       console.log('Anonymous User upgraded: ', resp);
-    });
+    }).catch(
+        (e: firebase.FirebaseError) => {
+          this.handleAuthErrors(e);
+        });
   }
 
   async loginAnonymously(geo: string): Promise<void> {
@@ -87,7 +84,6 @@ export class AuthService {
         const anomymousUser: AppUser = {
           uid: credential.user.uid,
           isAnonymous: credential.user.isAnonymous,
-          address: geo,
           displayName: 'Guest',
           photoURL: '/assets/profile_placeholder.png'
         };
@@ -106,20 +102,16 @@ export class AuthService {
   async googleSignin() {
     try {
       const provider = new auth.GoogleAuthProvider();
-      const credential: firebase.auth.UserCredential = await this.af.auth.signInWithPopup(
-        provider
-      );
+      const credential = await this.af.auth.signInWithPopup(provider);
       this.router.navigate(['/user/', credential.user.uid]);
-      // // Prepare user data //
-      // const googleUser: AppUser = {
-      //   uid: credential.user.uid,
-      //   isAnonymous: credential.user.isAnonymous,
-      //   displayName: credential.user.displayName,
-      //   photoURL: credential.user.photoURL,
-      //   // providerId: credential.user.providerId,
-      //   // geoInfo: geo
-      // };
-      // this.addUpdateUserDB(googleUser);
+      // Prepare user data //
+      const googleUser: AppUser = {
+        uid: credential.user.uid,
+        isAnonymous: credential.user.isAnonymous,
+        displayName: credential.user.displayName,
+        photoURL: credential.user.photoURL,
+      };
+      this.addUpdateUserDB(googleUser);
     } catch (e) {
       this.handleAuthErrors(e);
     }
@@ -136,10 +128,6 @@ export class AuthService {
       .catch(e => {
         console.log('Error: User not created' + e);
       });
-  }
-
-  upgradeAnonymousUser() {
-    // TODO: Upgrade anonymous user to google.
   }
 
 

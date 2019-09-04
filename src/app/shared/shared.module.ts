@@ -7,6 +7,7 @@ import { ProductCardComponent } from './product-card/product-card.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AppShellComponent } from './app-shell/app-shell.component';
 import { RouterModule } from '@angular/router';
+import { TruncatePipe } from './truncate.pipe';
 
 
 const SHARED_COMPONENTS = [
@@ -14,10 +15,17 @@ const SHARED_COMPONENTS = [
   ProductCardComponent,
   GooglePlacesDirective,
   ImgUploadComponent,
+  TruncatePipe
 ];
 
 @NgModule({
-  declarations: [GooglePlacesDirective, ImgUploadComponent, ProductCardComponent, AppShellComponent],
+  declarations: [
+    AppShellComponent,
+    GooglePlacesDirective,
+    ImgUploadComponent,
+    ProductCardComponent,
+    TruncatePipe
+  ],
   imports: [
     CommonModule,
     FlexLayoutModule,

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from './core/auth.service';
+import { Event, Router, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -9,5 +10,25 @@ import { AuthService } from './core/auth.service';
 export class AppComponent {
   // title = 'Yummz9*';
   title = null;
-  constructor(public auth: AuthService) {}
+  isLoading: boolean;
+
+  constructor(public auth: AuthService, private router: Router) {
+    this.isLoading = false;
+    this.router.events.subscribe((e: Event) => {
+      this.checkRouterEvent(e);
+    });
+  }
+
+  checkRouterEvent(e: Event): void {
+    if (e instanceof NavigationStart) {
+      this.isLoading = true;
+    }
+    if (
+      e instanceof NavigationEnd ||
+      e instanceof NavigationCancel ||
+      e instanceof NavigationError
+    ) {
+      this.isLoading = false;
+    }
+  }
 }
