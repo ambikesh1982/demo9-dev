@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { KitchenService } from '../kitchen.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { IMenuItem } from '../kitchen';
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { DialogService } from 'src/app/core/dialog.service';
 
 @Component({
   selector: 'app-my-kitchen',
@@ -20,13 +21,17 @@ export class MyKitchenComponent implements OnInit {
   menu: IMenuItem;
   kitchenId: string;
   hasMenuItems: boolean;
+  canNavigateAway: boolean;
+  showMenuTemplate: boolean;
 
 
   constructor(
+    private dialog: DialogService,
     private route: ActivatedRoute,
     private ks: KitchenService,
-    private location: Location,
-    private fb: FormBuilder) {
+    private fb: FormBuilder,
+    private router: Router) {
+      this.showMenuTemplate = false;
       this.createMenuForm();
    }
 
@@ -50,6 +55,11 @@ export class MyKitchenComponent implements OnInit {
     });
   }
 
+  showAddMenuTemplate(resp: boolean) {
+    this.showMenuTemplate = resp;
+    this.canNavigateAway = !resp;
+  }
+
 
   addMenuItem(kid: string, dataFromMenuForm) {
     const menu = dataFromMenuForm;
@@ -66,8 +76,15 @@ export class MyKitchenComponent implements OnInit {
     console.error('TODO: Remove menu item: ', id);
   }
 
-  goBack() {
-    this.location.back();
+  goBackToHome() {
+    this.router.navigate(['/']);
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+    if (!this.canNavigateAway) {
+      return this.dialog.openDialog('Discard the changes...?');
+    }
+    return this.canNavigateAway;
   }
 
 }

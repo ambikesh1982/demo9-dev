@@ -33,6 +33,7 @@ const kitchenRoutes: Routes = [
     path: 'my-kitchen/:kid',
     component: MyKitchenComponent,
     canActivate: [SocialGuard],
+    canDeactivate: [NavigateAwayGuard],
     resolve: { myKitchen: MyKitchenResolver }
   },
   {
