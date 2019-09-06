@@ -13,12 +13,14 @@ import { SocialGuard } from '../core/social.guard';
 import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { KitchenGuard } from './kitchen.guard';
+import { NavigateAwayGuard } from '../core/navigate-away.guard';
 
 
 const kitchenRoutes: Routes = [
   { path: ':kid',
     component: KitchenDetailComponent,
-    // canActivate: [AuthGuard],
+    canDeactivate: [NavigateAwayGuard],
+    canActivate: [AuthGuard],
     resolve: {myKitchen: MyKitchenResolver}
   },
   {

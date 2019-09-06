@@ -23,6 +23,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { canActivate, redirectUnauthorizedTo, redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { HomeComponent } from './home/home.component';
+import { AuthGuard } from './core/auth.guard';
 
 
 const redirectLoggedInToProductList = redirectLoggedInTo(['']);
@@ -30,19 +31,14 @@ const redirectUnauthorizedToHome = redirectUnauthorizedTo(['home']);
 
 const routes: Routes = [
   {
-    path: 'home', component: HomeComponent, ...canActivate(redirectLoggedInToProductList)
+    path: 'home', component: HomeComponent
   },
   { path: 'login',
     loadChildren: () => import('./login/login.module').then(m => m.LoginModule)
    },
-  // {
-  //   path: 'kitchen',
-  //   loadChildren: () => import('./kitchen/kitchen.module').then(m => m.KitchenModule)
-  // },
   { path: '',
     loadChildren: () => import('./kitchen/kitchen.module').then(m => m.KitchenModule),
-    // canActivate:[AuthGuard]
-    ...canActivate(redirectUnauthorizedToHome)
+    canActivate: [AuthGuard]
   },
   {
     path: 'user',

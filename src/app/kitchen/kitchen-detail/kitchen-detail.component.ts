@@ -6,6 +6,9 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { isNgTemplate } from '@angular/compiler';
 import { Location } from '@angular/common';
+import { DialogService } from 'src/app/core/dialog.service';
+import { AuthService } from 'src/app/core/auth.service';
+import { AppUser } from 'src/app/core/models';
 
 @Component({
   selector: 'app-kitchen-detail',
@@ -19,12 +22,18 @@ export class KitchenDetailComponent implements OnInit {
   order: IOrder;
   summary: {count: number, total: number};
   kitchenId;
+  canNavigateAway: boolean;
+  currUser: AppUser;
 
   constructor(
     private route: ActivatedRoute,
+    private auth: AuthService,
+    private dialog: DialogService,
     private ks: KitchenService,
     private location: Location) {
-    this.summary = {count: 0, total: 0};
+      this.canNavigateAway = true;
+      this.summary = {count: 0, total: 0};
+      this.currUser = this.auth.currUser;
    }
 
   ngOnInit() {
@@ -45,17 +54,19 @@ export class KitchenDetailComponent implements OnInit {
     this.menuItems[index].qty = this.menuItems[index].qty + qty;
     const itemsToOrder = this.menuItems.filter(i => i.qty > 0);
     this.summary = this.orderReducer(itemsToOrder);
-
-    const order: IOrder = {
-      buyerInfo: {uid: '123456', name: 'temp'},
-      kitchenInfo: {kid: this.kitchen.id, name: this.kitchen.title},
-      orderValue: this.summary.total,
-      itemsCount: this.summary.count,
-      items: itemsToOrder
-    };
-
-    this.order = order;
-
+    if (this.summary.count > 0) {
+      const order: IOrder = {
+        buyerInfo: { uid: this.currUser.uid, name: this.currUser.displayName },
+        kitchenInfo: { kid: this.kitchen.id, name: this.kitchen.title },
+        orderValue: this.summary.total,
+        itemsCount: this.summary.count,
+        items: itemsToOrder
+      };
+      this.order = order;
+      this.canNavigateAway = false;
+    } else {
+      this.canNavigateAway = true;
+    }
   }
 
   orderReducer(items: IMenuItem[]): {count: number, total: number} {
@@ -70,6 +81,13 @@ export class KitchenDetailComponent implements OnInit {
 
   goBack() {
     this.location.back();
+  }
+
+  canDeactivate(): Observable<boolean> | boolean {
+    if (!this.canNavigateAway) {
+      return this.dialog.openDialog('Discard changes for this Product?');
+    }
+    return this.canNavigateAway;
   }
 
 }

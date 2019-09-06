@@ -12,12 +12,13 @@ export class AuthGuard implements  CanActivate {
   async canActivate(
       next: ActivatedRouteSnapshot,
       state: RouterStateSnapshot): Promise<boolean> {
-      const user = await this.auth.getCurrentUser;
+      const user = await this.auth.getCurrentUser();
+      console.log('From AuthGuard: ', !!user);
       if (!!user) {
         return true;
       } else {
         console.log('Unauthorised User >>>>>> : Redirecting to home page');
-        this.router.navigate(['/']);
+        this.router.navigate(['home']);
         // this.router.navigate(['user', user.uid], { queryParams: { returnUrl: state.url } });
         return false;
       }

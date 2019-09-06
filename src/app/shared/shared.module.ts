@@ -8,10 +8,12 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { AppShellComponent } from './app-shell/app-shell.component';
 import { RouterModule } from '@angular/router';
 import { TruncatePipe } from './truncate.pipe';
+import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
 
 
 const SHARED_COMPONENTS = [
   AppShellComponent,
+  DialogConfirmComponent,
   ProductCardComponent,
   GooglePlacesDirective,
   ImgUploadComponent,
@@ -24,7 +26,8 @@ const SHARED_COMPONENTS = [
     GooglePlacesDirective,
     ImgUploadComponent,
     ProductCardComponent,
-    TruncatePipe
+    TruncatePipe,
+    DialogConfirmComponent
   ],
   imports: [
     CommonModule,
@@ -32,6 +35,9 @@ const SHARED_COMPONENTS = [
     MaterialModule,
     RouterModule
   ],
-  exports: [SHARED_COMPONENTS]
+  exports: [SHARED_COMPONENTS],
+  entryComponents: [
+    DialogConfirmComponent
+  ]
 })
 export class SharedModule { }
