@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { KitchenService } from '../kitchen.service';
 import { IKitchen, IMenuItem, IOrder } from '../kitchen';
 import { Observable } from 'rxjs';
@@ -27,6 +27,7 @@ export class KitchenDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private auth: AuthService,
     private dialog: DialogService,
     private ks: KitchenService,
@@ -80,7 +81,8 @@ export class KitchenDetailComponent implements OnInit {
   }
 
   goBack() {
-    this.location.back();
+    this.router.navigate(['/']);
+    // this.location.back();
   }
 
   canDeactivate(): Observable<boolean> | boolean {
