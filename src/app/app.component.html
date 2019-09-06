@@ -1,4 +1,4 @@
-<ng-template *ngIf="this.auth.currUser$|async"></ng-template>
+<ng-template *ngIf="currUser$|async"></ng-template>
 <div>
   <router-outlet></router-outlet>
   <mat-progress-spinner class="fixed-center" *ngIf="isLoading" mode="indeterminate"></mat-progress-spinner>
