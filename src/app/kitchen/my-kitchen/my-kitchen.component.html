@@ -1,4 +1,4 @@
-<div *ngIf="myKitchen">
+<div *ngIf="myKitchen$|async as myKitchen">
   <mat-toolbar>
     <mat-toolbar-row>
       <span style="font-size: medium">{{myKitchen.title}}</span>

@@ -15,7 +15,7 @@ import { DialogService } from 'src/app/core/dialog.service';
 })
 
 export class MyKitchenComponent implements OnInit {
-  myKitchen: IKitchen;
+  myKitchen$: Observable<IKitchen>;
   menuItems$: Observable<IMenuItem[]>;
   menuForm: FormGroup;
   menu: IMenuItem;
@@ -41,7 +41,7 @@ export class MyKitchenComponent implements OnInit {
       this.kitchenId = params.get('kid');
     });
 
-    this.myKitchen = this.route.snapshot.data.myKitchen;
+    this.myKitchen$ = this.ks.getKitchenDetails(this.kitchenId);
     this.menuItems$ = this.ks.getMenuItems(this.kitchenId).pipe(
       tap( resp => this.hasMenuItems = !!resp)
     );
