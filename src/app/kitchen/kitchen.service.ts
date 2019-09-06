@@ -10,10 +10,16 @@ import * as firebase from 'firebase';
 export class KitchenService {
   kitchenCollPath: string;
   menuSubCollPath: string;
+  db: firebase.firestore.WriteBatch;
+  increment;
+  decrement;
 
   constructor(private afs: AngularFirestore) {
     this.kitchenCollPath = 'kitchen';
     this.menuSubCollPath = 'menuItems';
+    this.db = this.afs.firestore.batch();
+    this.increment = firebase.firestore.FieldValue.increment(1);
+    this.decrement = firebase.firestore.FieldValue.increment(-1);
   }
 
   get serverTimestampFromFirestore() {
@@ -41,7 +47,18 @@ export class KitchenService {
 
   createMenuItem(kid: string, menu: IMenuItem) {
     const path = `kitchen/${kid}/menuItems`;
-    return this.afs.collection<IMenuItem>(path).add(menu);
+    const itemId = this.newFirebaseDocumentKey;
+    const itemDocRef = this.afs.collection(path).doc(itemId).ref;
+    const kitchenDocRef = this.afs.doc(`kitchen/${kid}`).ref;
+    const batch = this.afs.firestore.batch();
+    batch.set(itemDocRef, menu);
+    batch.set(kitchenDocRef, { menuItemsCount: this.increment}, {merge: true});
+    return batch.commit();
+    // return this.afs.collection<IMenuItem>(path).add(menu);
+  }
+
+  async deleteMenuItem(menuItemDoc: string) {
+    this.afs.doc(menuItemDoc).delete();
   }
 
   async createKitchen(kitchen: IKitchen) {

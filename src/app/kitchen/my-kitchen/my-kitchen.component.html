@@ -4,7 +4,7 @@
       <span style="font-size: medium">{{myKitchen.title}}</span>
       <span class="spacer"></span>
       <button mat-icon-button (click)="goBackToHome()">
-        <mat-icon>arrow_back</mat-icon>
+        <mat-icon>clear</mat-icon>
       </button>
     </mat-toolbar-row>
   </mat-toolbar>
@@ -15,10 +15,13 @@
       <p>{{myKitchen.address}}</p>
     </mat-card-content>
     <mat-card-actions fxLayout="row wrap" fxLayoutAlign="space-between">
-      <mat-slide-toggle>Veg Only</mat-slide-toggle>
+      <div>
+      <span>Menu# </span>
+      <span> {{myKitchen.menuItemsCount}}</span>
+      </div>
       <div>
         <mat-icon>favorite_border</mat-icon>
-        <span> 100</span>
+        <span>{{myKitchen.likeCount}}</span>
       </div>
     </mat-card-actions>
   </mat-card>
@@ -50,7 +53,7 @@
       <button mat-stroked-button (click)="showAddMenuTemplate(false)">
         Cancel
       </button>
-      <button mat-stroked-button [disabled]="menuForm.invalid" (click)="addMenuItem(myKitchen.kid, menuForm.value)">
+      <button mat-stroked-button [disabled]="menuForm.invalid" (click)="addMenuItem(menuForm.value)">
         Save
       </button>
     </mat-card-actions>

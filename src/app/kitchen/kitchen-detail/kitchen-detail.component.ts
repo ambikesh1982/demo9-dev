@@ -58,7 +58,7 @@ export class KitchenDetailComponent implements OnInit {
     if (this.summary.count > 0) {
       const order: IOrder = {
         buyerInfo: { uid: this.currUser.uid, name: this.currUser.displayName },
-        kitchenInfo: { kid: this.kitchen.id, name: this.kitchen.title },
+        kitchenInfo: { kid: this.kitchenId, name: this.kitchen.title },
         orderValue: this.summary.total,
         itemsCount: this.summary.count,
         items: itemsToOrder

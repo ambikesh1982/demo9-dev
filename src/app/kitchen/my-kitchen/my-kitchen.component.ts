@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { KitchenService } from '../kitchen.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
-import { IMenuItem } from '../kitchen';
+import { IMenuItem, IKitchen } from '../kitchen';
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { DialogService } from 'src/app/core/dialog.service';
@@ -15,7 +15,7 @@ import { DialogService } from 'src/app/core/dialog.service';
 })
 
 export class MyKitchenComponent implements OnInit {
-  myKitchen: any;
+  myKitchen: IKitchen;
   menuItems$: Observable<IMenuItem[]>;
   menuForm: FormGroup;
   menu: IMenuItem;
@@ -32,6 +32,7 @@ export class MyKitchenComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router) {
       this.showMenuTemplate = false;
+      this.canNavigateAway = true;
       this.createMenuForm();
    }
 
@@ -61,19 +62,22 @@ export class MyKitchenComponent implements OnInit {
   }
 
 
-  addMenuItem(kid: string, dataFromMenuForm) {
+  addMenuItem(dataFromMenuForm) {
     const menu = dataFromMenuForm;
     menu.createdAt = this.ks.serverTimestampFromFirestore;
     this.ks.createMenuItem(this.kitchenId, menu)
       .then(resp => {
-        console.log('Menu item added: ', resp.id);
         this.menuForm.reset();
+        this.showAddMenuTemplate(false);
       });
     console.log('Data from menu form: ', this.kitchenId, '-', dataFromMenuForm);
   }
 
-  removeMenuItem(id) {
-    console.error('TODO: Remove menu item: ', id);
+  removeMenuItem(menuId: string) {
+    const menuItemDoc = `kitchen/${this.kitchenId}/menuItems/${menuId}`;
+    this.ks.deleteMenuItem(menuItemDoc)
+      .then(resp => console.error('menu item removed >>>', menuItemDoc))
+      .catch( e => console.log('error in deleting menu item: ', e));
   }
 
   goBackToHome() {
