@@ -34,7 +34,6 @@ const kitchenRoutes: Routes = [
     component: MyKitchenComponent,
     canActivate: [SocialGuard],
     canDeactivate: [NavigateAwayGuard],
-    resolve: { myKitchen: MyKitchenResolver }
   },
   {
     path: '',
