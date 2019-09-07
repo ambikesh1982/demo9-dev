@@ -8,7 +8,7 @@
     fxLayout="row wrap" fxLayout.xs="column"
     fxLayoutAlign="space-around stretch">
     <mat-card *ngFor="let kitchen of kitchens"
-    (click)="navigateTo(kitchen.kid, kitchen.ownerId)">
+    (click)="navigateTo(kitchen)">
       {{kitchen.title}} | {{kitchen.address}} | {{kitchen.menuItemsCount}}
     </mat-card>
   </div>

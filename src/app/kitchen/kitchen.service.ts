@@ -32,7 +32,7 @@ export class KitchenService {
 
   getKitchenList(): Observable<IKitchen[]> {
     // return this.afs.collection<IKitchen>(this.kitchenCollPath).valueChanges({idField: 'kid'});
-    return this.afs.collection<IKitchen>(this.kitchenCollPath).valueChanges({ idField: 'kid' });
+    return this.afs.collection<IKitchen>(this.kitchenCollPath).valueChanges({ idField: 'id' });
   }
 
   getKitchenDetails(id: string) {
@@ -57,8 +57,14 @@ export class KitchenService {
     // return this.afs.collection<IMenuItem>(path).add(menu);
   }
 
-  async deleteMenuItem(menuItemDoc: string) {
-    this.afs.doc(menuItemDoc).delete();
+  async deleteMenuItem(kid: string, itemId: string) {
+    const path = `kitchen/${kid}/menuItems`;
+    const itemDocRef = this.afs.collection(path).doc(itemId).ref;
+    const kitchenDocRef = this.afs.doc(`kitchen/${kid}`).ref;
+    const batch = this.afs.firestore.batch();
+    batch.delete(itemDocRef);
+    batch.set(kitchenDocRef, { menuItemsCount: this.decrement }, { merge: true });
+    return batch.commit();
   }
 
   async createKitchen(kitchen: IKitchen) {

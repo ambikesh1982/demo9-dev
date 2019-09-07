@@ -57,6 +57,7 @@ export class MyKitchenComponent implements OnInit {
   }
 
   showAddMenuTemplate(resp: boolean) {
+    this.createMenuForm();
     this.showMenuTemplate = resp;
     this.canNavigateAway = !resp;
   }
@@ -67,7 +68,6 @@ export class MyKitchenComponent implements OnInit {
     menu.createdAt = this.ks.serverTimestampFromFirestore;
     this.ks.createMenuItem(this.kitchenId, menu)
       .then(resp => {
-        this.menuForm.reset();
         this.showAddMenuTemplate(false);
       });
     console.log('Data from menu form: ', this.kitchenId, '-', dataFromMenuForm);
@@ -75,7 +75,7 @@ export class MyKitchenComponent implements OnInit {
 
   removeMenuItem(menuId: string) {
     const menuItemDoc = `kitchen/${this.kitchenId}/menuItems/${menuId}`;
-    this.ks.deleteMenuItem(menuItemDoc)
+    this.ks.deleteMenuItem(this.kitchenId, menuId)
       .then(resp => console.error('menu item removed >>>', menuItemDoc))
       .catch( e => console.log('error in deleting menu item: ', e));
   }

@@ -24,15 +24,21 @@ export class KitchenListComponent implements OnInit {
     this.kitchens$ = this.ks.getKitchenList();
   }
 
-  navigateTo(kitchenId: string, ownerId: string) {
-    console.log('kitchenId:ownerId', kitchenId, ' - ', ownerId);
-    if (ownerId === this.currentUser.uid) {
-      this.router.navigate(['my-kitchen/', kitchenId]);
+  // navigateTo(kitchenId: string, ownerId: string) {
+  //   if (ownerId === this.currentUser.uid) {
+  //     this.router.navigate(['my-kitchen/', kitchenId]);
+  //   } else {
+  //     this.router.navigate([kitchenId]);
+  //   }
+  // }
+
+  navigateTo(kitchen: IKitchen) {
+    console.log('Kitchen selected: ', kitchen);
+    if (kitchen.ownerId === this.currentUser.uid) {
+      this.router.navigate(['my-kitchen/', kitchen.id]);
     } else {
-      this.router.navigate([kitchenId]);
+      this.router.navigate([kitchen.id]);
     }
-    // if (this.currentUser.uid === )
-    // [kitchen.ownerId == currentUser.uid ? 'my-kitchen/', user.kitchenId : kitchen.id]
   }
 
 }
