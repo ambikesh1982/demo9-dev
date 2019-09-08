@@ -21,16 +21,9 @@ export class KitchenListComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.kitchens$ = this.ks.getKitchenList();
+    this.kitchens$ = this.ks.kitchens$;
   }
 
-  // navigateTo(kitchenId: string, ownerId: string) {
-  //   if (ownerId === this.currentUser.uid) {
-  //     this.router.navigate(['my-kitchen/', kitchenId]);
-  //   } else {
-  //     this.router.navigate([kitchenId]);
-  //   }
-  // }
 
   navigateTo(kitchen: IKitchen) {
     console.log('Kitchen selected: ', kitchen);

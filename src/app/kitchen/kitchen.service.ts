@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { IKitchen, IMenuItem } from './kitchen';
-import { Observable } from 'rxjs';
+import { Observable, EMPTY } from 'rxjs';
 import * as firebase from 'firebase';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,13 @@ export class KitchenService {
   db: firebase.firestore.WriteBatch;
   increment;
   decrement;
+
+  kitchens$ = this.afs.collection<IKitchen>('kitchen').valueChanges({ idField: 'id' }).pipe(
+    catchError( e => {
+      console.error('Error while fetching kitchens from firebase: ', e);
+      return EMPTY;
+    })
+  );
 
   constructor(private afs: AngularFirestore) {
     this.kitchenCollPath = 'kitchen';
@@ -30,10 +38,10 @@ export class KitchenService {
     return this.afs.createId();
   }
 
-  getKitchenList(): Observable<IKitchen[]> {
-    // return this.afs.collection<IKitchen>(this.kitchenCollPath).valueChanges({idField: 'kid'});
-    return this.afs.collection<IKitchen>(this.kitchenCollPath).valueChanges({ idField: 'id' });
-  }
+  // getKitchenList(): Observable<IKitchen[]> {
+  //   // return this.afs.collection<IKitchen>(this.kitchenCollPath).valueChanges({idField: 'kid'});
+  //   return this.afs.collection<IKitchen>(this.kitchenCollPath).valueChanges({ idField: 'id' });
+  // }
 
   getKitchenDetails(id: string) {
     const myKitchen = `${this.kitchenCollPath}/${id}`;

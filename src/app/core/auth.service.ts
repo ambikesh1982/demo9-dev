@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import * as firebase from 'firebase';
 import { auth } from 'firebase';
 import { Observable, of } from 'rxjs';
-import { first, map, switchMap, tap, startWith } from 'rxjs/operators';
+import { first, map, switchMap, tap, startWith, shareReplay } from 'rxjs/operators';
 
 interface AppUser {
   uid: string;
