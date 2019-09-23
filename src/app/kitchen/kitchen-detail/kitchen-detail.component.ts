@@ -80,7 +80,11 @@ export class KitchenDetailComponent implements OnInit {
 
   prepareOrder() {
     this.ks.addOrder(this.order)
-      .then(resp => console.log('TODO: Order added - Redirect to orders page.'))
+      .then(resp => { 
+        console.log('Order added - Redirecting to orders page.');
+        this.canNavigateAway = true;
+        this.router.navigate(['orders', this.currUser.uid]);
+      })
       .catch(e => console.error('#### Error in adding order to firebase ####'));
   }
 
