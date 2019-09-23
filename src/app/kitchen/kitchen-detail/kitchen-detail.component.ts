@@ -57,6 +57,8 @@ export class KitchenDetailComponent implements OnInit {
     this.summary = this.orderReducer(itemsToOrder);
     if (this.summary.count > 0) {
       const order: IOrder = {
+        orderId: null,
+        status: 'Awaiting Confirmation',
         buyerInfo: { uid: this.currUser.uid, name: this.currUser.displayName },
         kitchenInfo: { kid: this.kitchenId, name: this.kitchen.title },
         orderValue: this.summary.total,
@@ -77,7 +79,9 @@ export class KitchenDetailComponent implements OnInit {
   }
 
   prepareOrder() {
-    console.log('My Order >> ', this.order);
+    this.ks.addOrder(this.order)
+      .then(resp => console.log('TODO: Order added - Redirect to orders page.'))
+      .catch(e => console.error('#### Error in adding order to firebase ####'));
   }
 
   goBack() {

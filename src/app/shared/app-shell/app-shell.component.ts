@@ -24,4 +24,8 @@ export class AppShellComponent implements OnInit {
   ngOnInit() {
   }
 
+  googleSignIn() {
+    this.auth.upgradeAnonymosToSocial();
+  }
+
 }

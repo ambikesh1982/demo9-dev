@@ -81,7 +81,12 @@ export class MyKitchenComponent implements OnInit {
   }
 
   goBackToHome() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/kitchen']);
+  }
+
+  navigateToManageKitchen() {
+    console.log('navigateToManageKitchen');
+    this.router.navigate(['kitchen', this.kitchenId, 'manage']);
   }
 
   canDeactivate(): Observable<boolean> | boolean {

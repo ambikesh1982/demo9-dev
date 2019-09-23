@@ -59,6 +59,7 @@ export interface Filter {
 }
 
 export interface IOrder {
+    orderId: string;
     buyer: { uid: string, displayName: string };
     seller: { uid: string, displayName: string };
     items: IOrderItem[];

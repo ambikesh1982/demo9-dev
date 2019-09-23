@@ -1,18 +1,19 @@
 <app-shell title="Yummz9">
-
-  <ng-template #emptyList>
-    <p>No kitchens to fetch...</p>
-  </ng-template>
-
-  <div *ngIf="kitchens$|async as kitchens else emptyList"
-    fxLayout="row wrap" fxLayout.xs="column"
-    fxLayoutAlign="space-around stretch">
-    <mat-card *ngFor="let kitchen of kitchens"
-    (click)="navigateTo(kitchen)">
-      {{kitchen.title}} | {{kitchen.address}} | {{kitchen.menuItemsCount}}
+  <div *ngIf="kitchens$|async as kitchens">
+    <mat-card *ngIf="kitchens.length === 0; else hasList">
+      <p>Oops...there are no kitchens yet...</p>
     </mat-card>
-  </div>
 
+    <ng-template #hasList>
+      <div fxLayout="row wrap" fxLayout.xs="column"
+        fxLayoutAlign="space-around stretch">
+        <mat-card *ngFor="let kitchen of kitchens" (click)="navigateTo(kitchen)">
+          {{kitchen.title}} | {{kitchen.address}} | {{kitchen.menuItemsCount}}
+        </mat-card>
+      </div>
+    </ng-template>
+
+  </div>
 </app-shell>
 
 

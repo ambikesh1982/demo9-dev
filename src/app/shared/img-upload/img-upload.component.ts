@@ -33,10 +33,12 @@ export class ImgUploadComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     console.log('Image url from parent component: ', this.image);
-    if (this.image.url && this.image.path) {
-      this.currentImage = this.image;
-      this.downloadURL = this.image.url;
-      this.updateFileCount(1);
+    if (this.image) {
+      if ( this.image.path && this.image.url) {
+        this.currentImage = this.image;
+        this.downloadURL = this.image.url;
+        this.updateFileCount(1);
+      }
     }
   }
 
@@ -75,7 +77,7 @@ export class ImgUploadComponent implements OnInit, OnDestroy {
       this.imagesToBeDeleted.push(this.currentImage);
       this.updateFileCount(-1);
       this.downloadURL = null;
-      this.imageUploaded.emit(null);
+      this.imageUploaded.emit({path: '', url: ''});
       this.uploadPercent$ = null;
       // this.cleanup(this.imagesToBeDeleted); // Todo: Remove the method.....
     }

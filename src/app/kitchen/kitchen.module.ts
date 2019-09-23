@@ -24,13 +24,12 @@ const kitchenRoutes: Routes = [
     resolve: {myKitchen: MyKitchenResolver}
   },
   {
-    path: 'kitchen/new',
+    path: ':kid/manage',
     component: CreateKitchenComponent,
-    canActivate: [SocialGuard, KitchenGuard],
-    resolve: { myKitchen: MyKitchenResolver }
+    canActivate: [SocialGuard],
   },
   {
-    path: 'my-kitchen/:kid',
+    path: ':kid/my-kitchen',
     component: MyKitchenComponent,
     canActivate: [SocialGuard],
     canDeactivate: [NavigateAwayGuard],

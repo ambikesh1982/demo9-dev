@@ -58,18 +58,19 @@ export class AuthService {
 
 
   async upgradeAnonymosToSocial() {
+    console.log('###### upgradeAnonymosToSocial ######');
     const provider = new auth.GoogleAuthProvider();
     const credential = await this.af.auth.signInWithPopup(provider);
     this.af.auth.currentUser.linkWithPopup(provider).then(resp => {
-      console.log('ToDo: Update User info');
       const upgradedUser: AppUser = {
         uid: resp.user.uid,
         isAnonymous: resp.user.isAnonymous,
         displayName: resp.user.displayName,
         photoURL: resp.user.photoURL
       };
-      this.addUpdateUserDB(upgradedUser);
       console.log('Anonymous User upgraded: ', resp);
+      console.log('Update User info', upgradedUser);
+      this.addUpdateUserDB(upgradedUser);
     }).catch(
         (e: firebase.FirebaseError) => {
           this.handleAuthErrors(e);
@@ -101,6 +102,7 @@ export class AuthService {
 
   async googleSignin() {
     try {
+      console.log('###### googleSignin ######');
       const provider = new auth.GoogleAuthProvider();
       const credential = await this.af.auth.signInWithPopup(provider);
       this.router.navigate(['/user/', credential.user.uid]);

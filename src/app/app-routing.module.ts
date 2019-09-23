@@ -36,7 +36,7 @@ const routes: Routes = [
   { path: 'login',
     loadChildren: () => import('./login/login.module').then(m => m.LoginModule)
    },
-  { path: '',
+  { path: 'kitchen',
     loadChildren: () => import('./kitchen/kitchen.module').then(m => m.KitchenModule),
     canActivate: [AuthGuard]
   },
@@ -44,7 +44,7 @@ const routes: Routes = [
     path: 'user',
     loadChildren: () => import('./user/user.module').then(m => m.UserModule)
   },
-  { path: '', redirectTo: '', pathMatch: 'full' }
+  { path: '', redirectTo: 'kitchen', pathMatch: 'full' }
 ];
 
 @NgModule({

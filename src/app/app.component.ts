@@ -39,7 +39,11 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.currUser$ = this.auth.currUser$.pipe(
-      tap(user => this.notify.openSnackBar(`Welcome ${user.displayName} !`))
+      tap(user => {
+        if (user) {
+          this.notify.openSnackBar(`Welcome ${user.displayName} !`);
+        }
+      })
     );
 
     // of(0, 1, 2, 3, 4, 5).pipe(

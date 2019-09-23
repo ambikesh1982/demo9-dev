@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IKitchen } from '../kitchen';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { AuthService } from 'src/app/core/auth.service';
 import { KitchenService } from '../kitchen.service';
 import { Location } from '@angular/common';
+import { Observable, of } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { switchMap, tap, map } from 'rxjs/operators';
 
 
 @Component({
@@ -11,34 +14,58 @@ import { Location } from '@angular/common';
   templateUrl: './create-kitchen.component.html',
   styleUrls: ['./create-kitchen.component.scss']
 })
-export class CreateKitchenComponent implements OnInit {
+export class CreateKitchenComponent implements OnInit, OnDestroy {
 
-  newKitchen: IKitchen;
+  kitchen: IKitchen;
+  kitchen$: Observable<IKitchen>;
   kitchenForm: FormGroup;
-  productStorageBucket;
-  ownerId: string;
+  productStorageBucket = 'kitchen';
+  isNewKitchen: boolean;
 
   constructor(
     private auth: AuthService,
     private ks: KitchenService,
     private fb: FormBuilder,
-    private location: Location) {
-    this.createKitchenForm();
-   }
+    private route: ActivatedRoute,
+    private router: Router) {
+    this.createEmptyForm(); // Create empty form
+  }
 
   ngOnInit() {
-    console.log('CurrentUser from AuthService: ', this.auth.currUser);
-    this.ownerId = this.auth.currUser.uid;
+    this.kitchen$ = this.route.paramMap.pipe(
+      switchMap(params => {
+        const kid = params.get('kid');
+        this.isNewKitchen = kid === 'new';
+        console.log('isNewKitchen: ', this.isNewKitchen);
+        if (kid) {
+          return this.ks.getKitchenDetails(kid);
+        } else {
+          return of(null);
+        }
+      }),
+      tap((kitchen: IKitchen) => {
+        console.log('Kitchen details >>>> ', kitchen);
+        this.kitchen = kitchen;
+        this.populateKitchenForm(this.kitchen);
+      })
+    );
   }
 
-  goBack() {
-    this.location.back();
+  populateKitchenForm(kitchen: IKitchen) {
+    // Patch form fileds from the kitchen returned(New or Existing)
+    this.kitchenForm.patchValue({
+      ownerId: this.auth.currUser.uid,
+      title: kitchen.title,
+      description: kitchen.description,
+      address: kitchen.address,
+      image: kitchen.image // Cannot convert undefined or null to object
+    });
   }
 
 
-  createKitchenForm() {
+  createEmptyForm() {
     this.kitchenForm = this.fb.group({
-      ownerId: [this.auth.currUser.uid, Validators.required],
+      ownerId: ['', Validators.required],
       title: ['', Validators.required],
       address: ['', Validators.required],
       image: this.fb.group({
@@ -51,8 +78,15 @@ export class CreateKitchenComponent implements OnInit {
     });
   }
 
-  addAddress($event) {
-    this.kitchenForm.get('address').setValue($event);
+  addAddress(address) {
+    console.log('Address from from: ', address);
+    this.kitchenForm.get('address').patchValue(address);
+    console.log('Kitchen Form: Address update: ', this.kitchenForm.value);
+  }
+
+  addImage(image) {
+    console.log('Image >>>', image);
+    this.kitchenForm.get('image').patchValue(image);
   }
 
   resetInput() {
@@ -60,14 +94,28 @@ export class CreateKitchenComponent implements OnInit {
   }
 
   async createKitchen(dataFromKitchenForm) {
-    const kitchen: IKitchen = dataFromKitchenForm;
-    kitchen.createdAt = this.ks.serverTimestampFromFirestore;
-    this.ks.createKitchen(kitchen);
-    console.log('Todo: Create Kitchen >>> ', kitchen);
+    const tempKitchen = { ...this.kitchen, ...this.kitchenForm.value };
+    if (this.isNewKitchen) { // For new kitchen
+      const tempKitchenId = this.ks.newFirebaseDocumentKey;
+      tempKitchen.id = tempKitchenId;
+      tempKitchen.createdAt = this.ks.serverTimestampFromFirestore;
+      this.ks.createKitchen(tempKitchen).then(
+        () => {
+          console.log('Redirecting to>>>', tempKitchen.id);
+          this.router.navigate(['kitchen', tempKitchen.id, 'my-kitchen']);
+        }).catch(e => console.error('createKitchen: ', e));
+    } else {
+      this.ks.updateKitchen(tempKitchen).then(
+        () => {
+          console.log('Update kitchen: redirecting to >>>', tempKitchen.id);
+          this.router.navigate(['kitchen', tempKitchen.id, 'my-kitchen']);
+        }).catch(e => console.error('createKitchen: ', e));
+    }
   }
-  storeImageDetails(event) {
-    console.log('Image >>>', event);
-    this.kitchenForm.get('image').setValue(event);
+
+  ngOnDestroy() {
+    console.log('CreateKitchenComponent destroyed!!');
+    this.resetInput();
   }
 
 }

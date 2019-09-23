@@ -1,7 +1,7 @@
 import * as firebase from 'firebase';
 
 export interface IKitchen {
-    // kid: string;
+    id: string;
     ownerId: string;
     title: string;
     address: string;
@@ -11,19 +11,25 @@ export interface IKitchen {
     menuItemsCount: number;
     likeCount: number;
     createdAt: firebase.firestore.FieldValue;
-    id?: string;
+}
+
+export interface IKitchenResolved {
+    kitchen: IKitchen;
+    error?: any;
 }
 
 export interface IMenuItem {
+    id: string;
     title: string;
     price: number;
     isNonVeg: boolean;
     qty: number;
-    id?: string;
     createdAt?: firebase.firestore.FieldValue;
 }
 
 export interface IOrder {
+    orderId: string;
+    status: string;
     buyerInfo: {uid: string, name: string};
     kitchenInfo: {kid: string, name: string};
     orderValue: number;

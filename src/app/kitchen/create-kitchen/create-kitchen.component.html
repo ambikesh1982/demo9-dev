@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="kitchen$|async as kitchen">
   <mat-toolbar>
     <mat-toolbar-row>
       <span style="font-size: medium">{{kitchenForm.value.title ? kitchenForm.value.title : 'New*'}}</span>
@@ -30,7 +30,10 @@
           (addressFromGoogle)="addAddress($event)" (click)="resetInput()">
       </mat-form-field>
 
-      <app-img-upload #upload [storageBucket]="productStorageBucket" (imageUploaded)="storeImageDetails($event)">
+      <app-img-upload #upload 
+        [image]="kitchen.image"
+        [storageBucket]="productStorageBucket" 
+        (imageUploaded)="addImage($event)">
       </app-img-upload>
 
     </form>
@@ -38,6 +41,7 @@
   </mat-card>
 
   <button mat-fab style="position: fixed; bottom:20px; right: 20px; z-index:99" 
+    [disabled]="kitchenForm.invalid"
     (click)="createKitchen(kitchenForm.value)">
     <mat-icon>done</mat-icon>
   </button>
