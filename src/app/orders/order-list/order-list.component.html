@@ -1,3 +1,30 @@
 <div *ngIf="orderPlaced|async as orders">
-  <mat-card *ngFor="let order of orders">{{order|json}}</mat-card>
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <span style="font-size: medium">Orders</span>
+      <span class="spacer"></span>
+      <button mat-icon-button>
+        <mat-icon>clear</mat-icon>
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <mat-card *ngFor="let order of orders" style="margin-bottom: 2px; font-size: small">
+    <div fxLayout="row wrap" fxLayoutAlign="space-between">
+      <span>{{order.kitchenInfo.name}}</span>
+      <span>#{{order.itemsCount}}</span>
+      <span>CAD {{order.orderValue}}</span>
+    </div>
+    <mat-list >
+      <mat-list-item *ngFor="let item of order.items" style="font-size: small">
+        <mat-icon mat-list-icon [color]="item.isNonVeg? 'warn':'accent'">adjust</mat-icon>
+        {{item.title}}
+      </mat-list-item>
+    </mat-list>
+
+    <mat-card-actions fxLayout="row wrap">
+      <span>{{order.status}}</span>
+      <span class="spacer"></span>
+      <button mat-stroked-button>Cancel</button>
+    </mat-card-actions>
+  </mat-card>
 </div>
