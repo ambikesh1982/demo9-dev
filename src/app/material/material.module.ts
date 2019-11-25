@@ -23,7 +23,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatAutocompleteModule } from '@angular/material';
+import { MatAutocompleteModule, MatExpansionModule, MatMenuModule } from '@angular/material';
 
 
 @NgModule({
@@ -36,11 +36,13 @@ import { MatAutocompleteModule } from '@angular/material';
     MatCheckboxModule,
     MatChipsModule,
     MatDialogModule,
+    MatExpansionModule,
     MatFormFieldModule,
     MatGridListModule,
     MatIconModule,
     MatInputModule,
     MatListModule,
+    MatMenuModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatRadioModule,

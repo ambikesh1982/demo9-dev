@@ -35,8 +35,15 @@ export class OrderListComponent implements OnInit {
           return { id, ...data };
         })
         ));
-
     // this.orderReceived = this.orderService.myOrdersReceived$;
+  }
+
+  cancelOrder(orderId: string) {
+    console.log('TODO: Cancel order: Update status to `Cancelled`');
+  }
+
+  initiateChat(orderId: string) {
+    console.log('TODO: Initiate chat...(orderId): ', orderId );
   }
 
 }

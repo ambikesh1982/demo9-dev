@@ -1,30 +1,70 @@
 <div *ngIf="orderPlaced|async as orders">
   <mat-toolbar>
-    <mat-toolbar-row>
-      <span style="font-size: medium">Orders</span>
+    <mat-toolbar-row >
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>
+          <mat-icon>schedule</mat-icon>
+          <span>Current</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>history</mat-icon>
+          <span>History</span>
+        </button>
+      </mat-menu>
+
+      <span style="font-size: medium">My Orders</span>
+      
       <span class="spacer"></span>
       <button mat-icon-button>
         <mat-icon>clear</mat-icon>
       </button>
     </mat-toolbar-row>
   </mat-toolbar>
-  <mat-card *ngFor="let order of orders" style="margin-bottom: 2px; font-size: small">
-    <div fxLayout="row wrap" fxLayoutAlign="space-between">
-      <span>{{order.kitchenInfo.name}}</span>
-      <span>#{{order.itemsCount}}</span>
-      <span>CAD {{order.orderValue}}</span>
-    </div>
-    <mat-list >
-      <mat-list-item *ngFor="let item of order.items" style="font-size: small">
-        <mat-icon mat-list-icon [color]="item.isNonVeg? 'warn':'accent'">adjust</mat-icon>
-        {{item.title}}
-      </mat-list-item>
-    </mat-list>
+  <mat-tab-group mat-align-tabs="end">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon style="color: black">schedule</mat-icon>
+      </ng-template>
+      <mat-card *ngFor="let order of orders" style="margin-bottom: 2px; font-size: small">
+        <div fxLayout="row wrap" fxLayoutAlign="space-between">
+          <span>{{order.kitchenInfo.name}}</span>
+          <span>#{{order.itemsCount}}</span>
+          <span>CAD {{order.orderValue}}</span>
+        </div>
+      
+        <mat-list>
+          <mat-list-item *ngFor="let item of order.items" style="font-size: small">
+            <p mat-line>{{item.title}}</p>
+            <p>{{item.qty}}</p>
+          </mat-list-item>
+        </mat-list>
+        <mat-card-actions fxLayout="row wrap">
+          <mat-chip-list>
+            <mat-chip color="primary" selected>
+              {{order.status}}
+            </mat-chip>
+          </mat-chip-list>
+          <span class="spacer"></span>
+          <button mat-stroked-button *ngIf="order.status != 'Confirmed'; else confirmed" (click)="cancelOrder(order.orderId)">
+            Cancel
+          </button>
+          <ng-template #confirmed>
+            <button mat-icon-button (click)="initiateChat(order.orderId)">
+              <mat-icon>chat</mat-icon>
+            </button>
+          </ng-template>
+        </mat-card-actions>
+      </mat-card>
+    </mat-tab>
 
-    <mat-card-actions fxLayout="row wrap">
-      <span>{{order.status}}</span>
-      <span class="spacer"></span>
-      <button mat-stroked-button>Cancel</button>
-    </mat-card-actions>
-  </mat-card>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon color="primary">history</mat-icon>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+  
 </div>

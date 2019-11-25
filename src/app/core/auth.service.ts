@@ -13,6 +13,7 @@ interface AppUser {
   kitchenId?: string;
   displayName?: string;
   photoURL?: string;
+  profileMode?: string;
 }
 
 @Injectable({
@@ -112,6 +113,7 @@ export class AuthService {
         isAnonymous: credential.user.isAnonymous,
         displayName: credential.user.displayName,
         photoURL: credential.user.photoURL,
+        profileMode: 'foodie'
       };
       this.addUpdateUserDB(googleUser);
     } catch (e) {
